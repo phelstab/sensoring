@@ -1,0 +1,1 @@
+[<pykinect_azure.k4abt.body.Body object at 0x0000020556CFD130>]

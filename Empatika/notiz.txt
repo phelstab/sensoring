@@ -1,0 +1,3 @@
+https://developer.empatica.com/windows-streaming-server.html
+https://developer.empatica.com/windows-streaming-server-usage.html
+https://github.com/molguin92/open-e4-client

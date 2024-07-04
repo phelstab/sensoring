@@ -1,0 +1,6 @@
+confluent_kafka
+param
+scikit-image
+panel
+npconvert
+jupyter_bokeh

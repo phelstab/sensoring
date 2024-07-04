@@ -1,0 +1,5 @@
+k4a
+numpy
+opencv-python
+pykinect
+pyk4a
