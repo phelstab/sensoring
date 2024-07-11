@@ -21,10 +21,11 @@ plotly
 pycparser
 pygments
 pyinstaller
-pyobjc-core
-pyobjc-framework-Cocoa
-pyobjc-framework-CoreBluetooth
-pyobjc-framework-libdispatch
+# pyobjc-core # for macos
+# pyobjc-framework-Cocoa # for macos
+# pyobjc-framework-CoreBluetooth # for macos
+# pyobjc-framework-libdispatch # for macos
+pywin32 # for windows
 pyparsing
 pyqtdarktheme
 pyrsistent
@@ -32,7 +33,6 @@ PySide6
 PySide6-Addons
 PySide6-Essentials
 pytz
-# pywin32
 qasync
 qtawesome
 qtpy
