@@ -1,5 +1,6 @@
 import os
 import platform
+from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt, Slot
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QSizeGrip
@@ -22,7 +23,7 @@ class StatusBar(QFrame):
         if platform.system().startswith("Windows"):
             self.base_path = os.path.join("C", "Users", self.user_name, "Videos")
         else:
-            self.base_path = os.path.join("home", self.user_name, "Videos")
+            self.base_path = os.path.join(str(Path.home()), "Videos")
 
         self.sub_data_layout = QHBoxLayout()
         self.label_save_path = Label(f"Save dir: {self.base_path}", fontsize=12)
