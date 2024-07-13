@@ -1,7 +1,7 @@
 
 import asyncio
 from PySide6.QtCore import QTimer, Qt, QPointF, QMargins, QSize, QFile
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy, QSlider, QLabel, QWidget, QGridLayout
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy, QSlider, QLabel, QWidget
 from PySide6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QScatterSeries, QSplineSeries, QAreaSeries
 from PySide6.QtGui import QPen, QColor, QPainter, QFont
 from bleak import BleakScanner
@@ -9,11 +9,57 @@ import time
 import numpy as np
 from Model import Model
 
-'''
-TODO: 
-- Abstract the historic series type
-- Exit the program nicely
-'''
+
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QListWidget, QLabel
+
+class DeviceSelectionWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Select Polar Device")
+        self.layout = QVBoxLayout(self)
+        self.device_list = QListWidget()
+        self.refresh_button = QPushButton("Refresh")
+        self.connect_button = QPushButton("Connect")
+        self.status_label = QLabel("Click Refresh to search for devices")
+
+        self.layout.addWidget(self.status_label)
+        self.layout.addWidget(self.device_list)
+        self.layout.addWidget(self.refresh_button)
+        self.layout.addWidget(self.connect_button)
+
+        self.refresh_button.clicked.connect(self.search_devices)
+        self.connect_button.clicked.connect(self.accept)
+
+        self.selected_device = None
+        self.search_thread = DeviceSearchThread()
+        self.search_thread.devices_found.connect(self.update_device_list)
+
+    def search_devices(self):
+        self.device_list.clear()
+        self.status_label.setText("Searching for devices...")
+        self.search_thread.start()
+
+    def update_device_list(self, devices):
+        for device in devices:
+            if device.name is not None and "Polar" in device.name:
+                self.device_list.addItem(f"{device.name} ({device.address})")
+        self.status_label.setText("Select a device and click Connect")
+
+    def get_selected_device(self):
+        if self.device_list.currentItem():
+            return self.device_list.currentItem().text().split(" (")[1][:-1]
+        return None
+
+from PySide6.QtCore import QThread, Signal
+
+class DeviceSearchThread(QThread):
+    devices_found = Signal(list)
+
+    def run(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        devices = loop.run_until_complete(BleakScanner.discover())
+        self.devices_found.emit(devices)
 
 class CirclesWidget(QChartView):
     def __init__(self, x_values=None, y_values=None, pacer_color=None, breathing_color=None, hr_color=None):
@@ -392,24 +438,22 @@ class View(QChartView):
         self.circles_widget.update_breath_series(*breath_coordinates)
 
     async def connect_polar(self):
+        device_window = DeviceSelectionWindow(self)
+        if device_window.exec():
+            selected_address = device_window.get_selected_device()
+            if selected_address:
+                device = await BleakScanner.find_device_by_address(selected_address)
+                if device:
+                    self.model.set_polar_sensor(device)
+                    await self.model.connect_sensor()
+                    print(f"Connected to {device.name}")
+                else:
+                    print("Failed to connect to the selected device")
+            else:
+                print("No device selected")
+        else:
+            print("Device selection cancelled")
 
-        polar_device_found = False
-        print("Looking for Polar device...")
-        while not polar_device_found:
-
-            devices = await BleakScanner.discover()
-            print(f"Found {len(devices)} BLE devices")
-            for device in devices:
-                if device.name is not None and "Polar" in device.name:
-                    polar_device_found = True
-                    print(f"Found Polar device")
-                    break
-            if not polar_device_found:
-                print("Polar device not found, retrying in 1 second")
-                await asyncio.sleep(1)
-        
-        self.model.set_polar_sensor(device)
-        await self.model.connect_sensor()
 
     async def disconnect_polar(self):
         await self.model.disconnect_sensor()
@@ -482,5 +526,7 @@ class View(QChartView):
 
     async def main(self):
         await self.connect_polar()
-        await asyncio.gather(self.model.update_ibi(), self.model.update_acc())
-    
+        if self.model.polar_sensor:
+            await asyncio.gather(self.model.update_ibi(), self.model.update_acc())
+        else:
+            print("No Polar device connected. Exiting.")
