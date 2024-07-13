@@ -3,6 +3,7 @@ import asyncio
 import time
 import numpy as np
 import math
+import csv
 
 class CircularBuffer2D:
     def __init__(self, rows, cols):
@@ -117,9 +118,21 @@ class PolarH10:
         self.acc_queue_times = CircularBuffer2D(200,1)
         self.ecg_queue_values = CircularBuffer2D(200,1)
         self.ecg_queue_times = CircularBuffer2D(200,1)
+
         self.polar_to_epoch_s = 0
         self.first_acc_record = True
         self.first_ecg_record = True
+
+        self.acc_file = open('acc_data.csv', 'w', newline='')
+        self.ecg_file = open('ecg_data.csv', 'w', newline='')
+        self.ibi_file = open('ibi_data.csv', 'w', newline='')
+        self.acc_writer = csv.writer(self.acc_file)
+        self.ecg_writer = csv.writer(self.ecg_file)
+        self.ibi_writer = csv.writer(self.ibi_file)
+
+        self.acc_writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
+        self.ecg_writer.writerow(['Timestamp', 'ECG'])
+        self.ibi_writer.writerow(['Timestamp', 'IBI'])
     
     def hr_data_conv(self, sender, data):  
         """
@@ -164,7 +177,12 @@ class PolarH10:
             # Convert 1/1024 sec format to milliseconds.
             # TODO: move conversion to model and only convert if sensor doesn't
             # transmit data in milliseconds.
-            ibi = np.ceil(ibi / 1024 * 1000)            
+            ibi = np.ceil(ibi / 1024 * 1000)       
+
+            current_time = time.time_ns()/1.0e9
+            self.ibi_writer.writerow([current_time, ibi])
+            self.ibi_file.flush()
+
             self.ibi_queue_values.enqueue(np.array([ibi]))
             self.ibi_queue_times.enqueue(np.array([time.time_ns()/1.0e9]))
 
@@ -203,6 +221,10 @@ class PolarH10:
                 z = PolarH10.convert_array_to_signed_int(samples, offset, step)/100.0
                 offset += step
 
+                # write to csv
+                self.acc_writer.writerow([sample_timestamp, x, y, z])
+                self.acc_file.flush()
+
                 self.acc_queue_times.enqueue(np.array([sample_timestamp]))
                 self.acc_queue_values.enqueue(np.array([x, y, z]))
 
@@ -226,10 +248,15 @@ class PolarH10:
                 self.polar_to_epoch_s = stream_start_t_epoch_s - stream_start_t_polar_s
                 self.first_ecg_record = False
 
-            sample_timestamp = timestamp - recordDuration + self.polar_to_epoch_s # timestamp of the first sample in the record in epoch seconds
+            sample_timestamp = timestamp - recordDuration + self.polar_to_epoch_s
             while offset < len(samples):
                 ecg = PolarH10.convert_array_to_signed_int(samples, offset, step)       
                 offset += step
+                
+                # Write to CSV file
+                self.ecg_writer.writerow([sample_timestamp, ecg])
+                self.ecg_file.flush()
+                
                 self.ecg_queue_values.enqueue(np.array([ecg]))
                 self.ecg_queue_times.enqueue(np.array([sample_timestamp]))
                 sample_timestamp += time_step
