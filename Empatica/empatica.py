@@ -25,8 +25,10 @@ class DataReceiver(QThread):
         sock.sendall(f'device_connect {device_id}\r\n'.encode())
         sock.recv(1024)
 
-        streams = ['acc', 'bvp', 'gsr', 'tmp', 'ibi', 'hr']
+        # streams = ['acc', 'bvp', 'gsr', 'tmp', 'ibi', 'hr']
+        streams = ["acc","bat","bvp","gsr","ibi","tag","tmp"]
         for stream in streams:
+            print(stream)
             sock.sendall(f'device_subscribe {stream} ON\r\n'.encode())
             sock.recv(1024)
 
@@ -93,60 +95,81 @@ class MainWindow(QWidget):
         self.data_receiver = DataReceiver()
         self.data_receiver.data_received.connect(self.update_plot)
         self.data_receiver.start()
-
     def update_plot(self, data):
-        stream_type, timestamp, *values = data.split()
-        timestamp = float(timestamp)
-        nanoseconds = int(timestamp * 1e9)
+        parts = data.split()
+        if len(parts) >= 3 and parts[0].startswith('E4_'):
+            stream_type, timestamp, *values = parts
+            timestamp = float(timestamp)
+            nanoseconds = int(timestamp * 1e9)
 
+            if self.logging_enabled:
+                self.write_to_file(stream_type, nanoseconds, values)
+
+            if stream_type == 'E4_Acc':
+                if len(values) == 3:
+                    x, y, z = map(float, values)
+                    self.acc_data.append((timestamp, x, y, z))
+                    self.acc_curve.setData([d[0] for d in self.acc_data[-100:]], [d[1] for d in self.acc_data[-100:]])
+
+            elif stream_type == 'E4_Bvp':
+                value = float(values[0])
+                self.bvp_data.append((timestamp, value))
+                self.bvp_curve.setData([d[0] for d in self.bvp_data[-100:]], [d[1] for d in self.bvp_data[-100:]])
+
+            elif stream_type == 'E4_Gsr':
+                value = float(values[0])
+                self.gsr_data.append((timestamp, value))
+                self.gsr_curve.setData([d[0] for d in self.gsr_data[-100:]], [d[1] for d in self.gsr_data[-100:]])
+
+            elif stream_type == 'E4_Temperature':
+                value = float(values[0])
+                self.tmp_data.append((timestamp, value))
+                self.tmp_curve.setData([d[0] for d in self.tmp_data[-100:]], [d[1] for d in self.tmp_data[-100:]])
+
+            elif stream_type == 'E4_Ibi':
+                value = float(values[0])
+                self.ibi_data.append((timestamp, value))
+                self.ibi_curve.setData([d[0] for d in self.ibi_data[-100:]], [d[1] for d in self.ibi_data[-100:]])
+
+            elif stream_type == 'E4_Hr':
+                value = float(values[0])
+                self.hr_data.append((timestamp, value))
+                self.hr_curve.setData([d[0] for d in self.hr_data[-100:]], [d[1] for d in self.hr_data[-100:]])
+        else:
+            print(f"Received non-data message: {data}")
+            if self.logging_enabled:
+                self.write_non_data_to_file(data)
+
+    def write_to_file(self, stream_type, nanoseconds, values):
         if stream_type == 'E4_Acc':
             if len(values) == 3:
                 x, y, z = map(float, values)
-                self.acc_data.append((timestamp, x, y, z))
-                self.acc_curve.setData([d[0] for d in self.acc_data[-100:]], [d[1] for d in self.acc_data[-100:]])
-                if self.logging_enabled:
-                    self.acc_writer.writerow([nanoseconds, x, y, z])
-                    self.acc_file.flush()
-
+                self.acc_writer.writerow([nanoseconds, x, y, z])
+                self.acc_file.flush()
         elif stream_type == 'E4_Bvp':
             value = float(values[0])
-            self.bvp_data.append((timestamp, value))
-            self.bvp_curve.setData([d[0] for d in self.bvp_data[-100:]], [d[1] for d in self.bvp_data[-100:]])
-            if self.logging_enabled:
-                self.bvp_writer.writerow([nanoseconds, value])
-                self.bvp_file.flush()
-
+            self.bvp_writer.writerow([nanoseconds, value])
+            self.bvp_file.flush()
         elif stream_type == 'E4_Gsr':
             value = float(values[0])
-            self.gsr_data.append((timestamp, value))
-            self.gsr_curve.setData([d[0] for d in self.gsr_data[-100:]], [d[1] for d in self.gsr_data[-100:]])
-            if self.logging_enabled:
-                self.gsr_writer.writerow([nanoseconds, value])
-                self.gsr_file.flush()
-
+            self.gsr_writer.writerow([nanoseconds, value])
+            self.gsr_file.flush()
         elif stream_type == 'E4_Temperature':
             value = float(values[0])
-            self.tmp_data.append((timestamp, value))
-            self.tmp_curve.setData([d[0] for d in self.tmp_data[-100:]], [d[1] for d in self.tmp_data[-100:]])
-            if self.logging_enabled:
-                self.tmp_writer.writerow([nanoseconds, value])
-                self.tmp_file.flush()
-
+            self.tmp_writer.writerow([nanoseconds, value])
+            self.tmp_file.flush()
         elif stream_type == 'E4_Ibi':
             value = float(values[0])
-            self.ibi_data.append((timestamp, value))
-            self.ibi_curve.setData([d[0] for d in self.ibi_data[-100:]], [d[1] for d in self.ibi_data[-100:]])
-            if self.logging_enabled:
-                self.ibi_writer.writerow([nanoseconds, value])
-                self.ibi_file.flush()
-
+            self.ibi_writer.writerow([nanoseconds, value])
+            self.ibi_file.flush()
         elif stream_type == 'E4_Hr':
             value = float(values[0])
-            self.hr_data.append((timestamp, value))
-            self.hr_curve.setData([d[0] for d in self.hr_data[-100:]], [d[1] for d in self.hr_data[-100:]])
-            if self.logging_enabled:
-                self.hr_writer.writerow([nanoseconds, value])
-                self.hr_file.flush()
+            self.hr_writer.writerow([nanoseconds, value])
+            self.hr_file.flush()
+
+    def write_non_data_to_file(self, data):
+        self.non_data_writer.writerow([int(time.time() * 1e9), data])
+        self.non_data_file.flush()
 
     def toggle_logging(self):
         if not self.logging_enabled:
@@ -156,12 +179,14 @@ class MainWindow(QWidget):
             self.tmp_file = open('tmp_data.csv', 'w', newline='')
             self.ibi_file = open('ibi_data.csv', 'w', newline='')
             self.hr_file = open('hr_data.csv', 'w', newline='')
+            self.non_data_file = open('non_data_log.csv', 'w', newline='')
             self.acc_writer = csv.writer(self.acc_file)
             self.bvp_writer = csv.writer(self.bvp_file)
             self.gsr_writer = csv.writer(self.gsr_file)
             self.tmp_writer = csv.writer(self.tmp_file)
             self.ibi_writer = csv.writer(self.ibi_file)
             self.hr_writer = csv.writer(self.hr_file)
+            self.non_data_writer = csv.writer(self.non_data_file)
             self.log_button.setText('Stop Logging')
             self.logging_enabled = True
         else:
@@ -171,6 +196,7 @@ class MainWindow(QWidget):
             self.tmp_file.close()
             self.ibi_file.close()
             self.hr_file.close()
+            self.non_data_file.close()
             self.log_button.setText('Start Logging')
             self.logging_enabled = False
 
