@@ -74,7 +74,7 @@ class RecordSensors(QThread):
         self.ready_audio()
         self.io_device = self.audio_input.start()
         self.start_time = time.time()
-    
+        
     def stop_audio(self):
         self.audio_input.stop()
         self.io_device = None
@@ -85,4 +85,15 @@ class RecordSensors(QThread):
         format_audio.setSampleRate(44200)
         format_audio.setChannelCount(3)
         format_audio.setSampleFormat(QAudioFormat.SampleFormat.UInt8)
-        self.audio_input = QAudioSource(self.input_devices[0], format_audio)
+        
+        # Get the first available audio input device
+        input_device = QMediaDevices.defaultAudioInput()
+        
+        # Create the QAudioSource with the selected input device and format
+        self.audio_input = QAudioSource(input_device, format_audio)
+        
+        # Get the name of the selected audio input device
+        device_name = input_device.description()
+        
+        # Emit the device name signal
+        all_signals.record_signals.audio_device_name.emit(device_name)

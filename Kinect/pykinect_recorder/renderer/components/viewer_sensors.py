@@ -98,6 +98,7 @@ class SensorViewer(QFrame):
         all_signals.record_signals.imu_acc_data.connect(self.set_acc_data)
         all_signals.record_signals.imu_gyro_data.connect(self.set_gyro_data)
         all_signals.record_signals.audio_data.connect(self.set_audio_data)
+        all_signals.record_signals.audio_device_name.connect(self.set_audio_device_name)
 
     def select_option(self, value):
         if value == "viewer":
@@ -273,6 +274,10 @@ class SensorViewer(QFrame):
             data_index = data_index + RESOLUTION
 
         self.audio_sensor.series.replace(self.buffer)
+
+    @Slot(str)
+    def set_audio_device_name(self, device_name: str) -> None:
+        self.audio_sensor.label_device_name.setText(f"Device: {device_name}")
 
     def clear_frame(self):
         self.frame_rgb.label_image.clear()

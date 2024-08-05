@@ -28,6 +28,7 @@ class RecorderSignals(QObject):
     imu_gyro_data = Signal(list)
     audio_data = Signal(list)
     is_sidebar_enable = Signal(bool)
+    audio_device_name = Signal(str)
 
 
 class PlaybackSignals(QObject):

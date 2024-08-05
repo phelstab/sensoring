@@ -74,7 +74,7 @@ class Topbar(QFrame):
 
         self.title_layout = QHBoxLayout()
         self.title_layout.setAlignment(Qt.AlignCenter)
-        self.label_title = Label("pykinect-recorder", font="Arial", fontsize=12, orientation=Qt.AlignCenter)
+        self.label_title = Label("Azure Kinect DK Recorder (video/audio)", font="Arial", fontsize=12, orientation=Qt.AlignCenter)
         self.title_layout.addWidget(self.label_title)
         main_layout.addLayout(self.title_layout)
 

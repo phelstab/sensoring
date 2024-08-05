@@ -45,4 +45,10 @@ class AudioSensor(QFrame):
 
         self.main_layout.addWidget(self.label_title)
         self.main_layout.addWidget(self.chart_view)
+
+        self.label_device_name = Label("Device: ", orientation=Qt.AlignLeft)
+        self.label_device_name.setMinimumHeight(20)
+        self.label_device_name.setMaximumHeight(30)
+    
+        self.main_layout.addWidget(self.label_device_name)
         self.setLayout(self.main_layout)
