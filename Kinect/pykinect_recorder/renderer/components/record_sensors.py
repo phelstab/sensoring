@@ -25,6 +25,8 @@ class RecordSensors(QThread):
         self.video_file_path = video_file_path
         self.audio_input = None
         self.input_devices = QMediaDevices.audioInputs()
+        self.is_audio_recording = False  # Flag to check if audio recording is active
+        self.start_time = None  # Initialize start_time
 
         dict_fps = {0: "5", 1: "15", 2: "30"}
         self.device_fps = int(dict_fps[self.device.configuration.camera_fps])
@@ -63,22 +65,23 @@ class RecordSensors(QThread):
         gyro_data = current_imu_data.gyro
 
         # Audio
-        data = self.io_device.readAll()
-        available_samples = data.size() // RESOLUTION
-        
-        # Write the audio data to the temporary file
-        self.audio_file.write(data.data())
+        if self.is_audio_recording:
+            data = self.io_device.readAll()
+            available_samples = data.size() // RESOLUTION
+            
+            # Write the audio data to the temporary file
+            self.audio_file.write(data.data())
+            all_signals.record_signals.audio_data.emit([data, available_samples])
 
         all_signals.record_signals.video_fps.emit(int(self.device_fps))
-        all_signals.record_signals.record_time.emit((end_time-self.start_time))
+        all_signals.record_signals.record_time.emit((end_time - self.start_time))
         all_signals.record_signals.imu_acc_data.emit(acc_data)
         all_signals.record_signals.imu_gyro_data.emit(gyro_data)
-        all_signals.record_signals.audio_data.emit([data, available_samples])
 
     def start_audio(self):
         self.ready_audio()
         self.io_device = self.audio_input.start()
-        self.start_time = time.time()
+        self.is_audio_recording = True  # Set the flag to True
         
         # Create a temporary file for storing the audio data
         self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
@@ -87,6 +90,7 @@ class RecordSensors(QThread):
         import os
         self.audio_input.stop()
         self.io_device = None
+        self.is_audio_recording = False  # Set the flag to False
 
         # Close the temporary file
         self.audio_file.close()

@@ -132,12 +132,19 @@ class SensorViewer(QFrame):
                 )
 
             self.viewer = RecordSensors(device=self.device, video_file_path=self.filename_video)
-            self.viewer.start_audio()
+            
+            if self.is_record:
+                self.viewer.start_audio()
+            
+            self.viewer.start_time = time.time()  # Set start_time when the timer starts
             self.viewer.timer.start()
             self.is_play = False
         else:
             self.viewer.timer.stop()
-            self.viewer.stop_audio()
+            
+            if self.is_record:
+                self.viewer.stop_audio()
+                
             self.viewer.quit()
             self.device.close()
             self.is_play = True
@@ -145,7 +152,6 @@ class SensorViewer(QFrame):
             if self.is_record:
                 wait_dialog = CustomProgressBarDialog(msec=500)
                 wait_dialog.show()
-
     def set_filename(self) -> None:
         if self.base_path is None:
             self.base_path = os.path.join(Path.home(), "Videos")
