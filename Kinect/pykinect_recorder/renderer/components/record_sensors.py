@@ -19,9 +19,10 @@ RESOLUTION = 4
 
 
 class RecordSensors(QThread):
-    def __init__(self, device: Device) -> None:
+    def __init__(self, device: Device, video_file_path: str) -> None:
         super().__init__()
         self.device = device
+        self.video_file_path = video_file_path
         self.audio_input = None
         self.input_devices = QMediaDevices.audioInputs()
 
@@ -30,7 +31,7 @@ class RecordSensors(QThread):
 
         self.timer = QTimer()
         self.timer.setInterval(1000 / self.device_fps)
-        self.timer.timeout.connect(self.update_next_frame)   
+        self.timer.timeout.connect(self.update_next_frame)
 
     def update_next_frame(self):
         current_frame = self.device.update()
@@ -81,8 +82,9 @@ class RecordSensors(QThread):
         
         # Create a temporary file for storing the audio data
         self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-        
+
     def stop_audio(self):
+        import os
         self.audio_input.stop()
         self.io_device = None
 
@@ -93,8 +95,9 @@ class RecordSensors(QThread):
         with open(self.audio_file.name, "rb") as temp_file:
             audio_data = temp_file.read()
 
-        output_file = "output.wav"  # Specify the desired output file name
-        with wave.open(output_file, "wb") as wav_file:
+        # Use the same directory as the video file
+        audio_file_path = os.path.splitext(self.video_file_path)[0] + ".wav"
+        with wave.open(audio_file_path, "wb") as wav_file:
             wav_file.setnchannels(7)
             wav_file.setsampwidth(2)  # 16-bit samples
             wav_file.setframerate(16000)

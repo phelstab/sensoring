@@ -131,7 +131,7 @@ class SensorViewer(QFrame):
                     self.device._handle, color_command_dict[k], K4A_COLOR_CONTROL_MODE_MANUAL, ctypes.c_int32(int(v))
                 )
 
-            self.viewer = RecordSensors(device=self.device)
+            self.viewer = RecordSensors(device=self.device, video_file_path=self.filename_video)
             self.viewer.start_audio()
             self.viewer.timer.start()
             self.is_play = False
