@@ -13,7 +13,8 @@ from ..signals import all_signals
 from ...pyk4a import Device
 from ...pyk4a.utils import colorize
 
-
+import wave
+import tempfile
 RESOLUTION = 4
 
 
@@ -60,9 +61,12 @@ class RecordSensors(QThread):
         acc_data = current_imu_data.acc
         gyro_data = current_imu_data.gyro
 
-        # audio
+        # Audio
         data = self.io_device.readAll()
         available_samples = data.size() // RESOLUTION
+        
+        # Write the audio data to the temporary file
+        self.audio_file.write(data.data())
 
         all_signals.record_signals.video_fps.emit(int(self.device_fps))
         all_signals.record_signals.record_time.emit((end_time-self.start_time))
@@ -75,25 +79,48 @@ class RecordSensors(QThread):
         self.io_device = self.audio_input.start()
         self.start_time = time.time()
         
+        # Create a temporary file for storing the audio data
+        self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        
     def stop_audio(self):
         self.audio_input.stop()
         self.io_device = None
 
+        # Close the temporary file
+        self.audio_file.close()
+
+        # Open the temporary file in binary mode
+        with open(self.audio_file.name, "rb") as temp_file:
+            audio_data = temp_file.read()
+
+        output_file = "output.wav"  # Specify the desired output file name
+        with wave.open(output_file, "wb") as wav_file:
+            wav_file.setnchannels(7)
+            wav_file.setsampwidth(2)  # 16-bit samples
+            wav_file.setframerate(16000)
+            wav_file.writeframes(audio_data)
+
     def ready_audio(self) -> None:
-        # https://github.com/ShadarRim/opencvpythonvideoplayer/blob/master/player.py
         format_audio = QAudioFormat()
-        format_audio.setSampleRate(44200)
-        format_audio.setChannelCount(3)
-        format_audio.setSampleFormat(QAudioFormat.SampleFormat.UInt8)
-        
-        # Get the first available audio input device
-        input_device = QMediaDevices.defaultAudioInput()
-        
+        format_audio.setSampleRate(16000)
+        format_audio.setChannelCount(7)
+        format_audio.setSampleFormat(QAudioFormat.SampleFormat.Int16)
+
+        # Get the Azure Kinect DK audio input device
+        input_device = None
+        for device in QMediaDevices.audioInputs():
+            if "Azure Kinect" in device.description():
+                input_device = device
+                break
+
+        if input_device is None:
+            raise ValueError("Azure Kinect DK audio device not found.")
+
         # Create the QAudioSource with the selected input device and format
         self.audio_input = QAudioSource(input_device, format_audio)
-        
+
         # Get the name of the selected audio input device
         device_name = input_device.description()
-        
+
         # Emit the device name signal
         all_signals.record_signals.audio_device_name.emit(device_name)
