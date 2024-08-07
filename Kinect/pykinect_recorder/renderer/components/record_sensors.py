@@ -71,6 +71,8 @@ class RecordSensors(QThread):
 
             # Append the audio data to the bytearray
             self.audio_data.extend(data.data())
+
+            # all_signals.record_signals.audio_data.emit([data, available_samples]) #sorgt für drift
             return data, available_samples
         return None, 0
 
