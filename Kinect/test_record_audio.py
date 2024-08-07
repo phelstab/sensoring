@@ -1,5 +1,4 @@
 import wave
-import tempfile
 import os
 from PySide6.QtMultimedia import QAudioFormat, QAudioSource, QMediaDevices
 from PySide6.QtCore import QIODevice, QTimer, QElapsedTimer
@@ -12,7 +11,7 @@ class AudioRecorder:
         self.audio_input = None
         self.io_device = None
         self.is_audio_recording = False
-        self.audio_file = None
+        self.audio_data = bytearray()
         self.timer = None
         self.elapsed_timer = QElapsedTimer()
         self.time_label = QLabel("00:00:00")
@@ -41,8 +40,8 @@ class AudioRecorder:
         self.io_device = self.audio_input.start()
         self.is_audio_recording = True
 
-        # Create a temporary file for storing the audio data
-        self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        # Clear the audio data
+        self.audio_data = bytearray()
 
         # Start a timer to read audio data periodically
         self.timer = QTimer()
@@ -63,23 +62,15 @@ class AudioRecorder:
             self.timer.stop()
             self.timer = None
 
-        # Close and flush the temporary file
-        self.audio_file.flush()
-        self.audio_file.close()
-
-        # Open the temporary file in binary mode
-        with open(self.audio_file.name, "rb") as temp_file:
-            audio_data = temp_file.read()
-
         # Use the Windows Videos folder
         videos_folder = os.path.join(os.path.expanduser("~"), "Videos")
-        audio_file_path = os.path.join(videos_folder, f"recorded_audio_{os.path.basename(self.audio_file.name)}")
+        audio_file_path = os.path.join(videos_folder, f"recorded_audio_{self.elapsed_timer.elapsed()}.wav")
 
         with wave.open(audio_file_path, "wb") as wav_file:
             wav_file.setnchannels(7)
             wav_file.setsampwidth(2)  # 16-bit samples
             wav_file.setframerate(16000)
-            wav_file.writeframes(audio_data)
+            wav_file.writeframes(self.audio_data)
 
         print(f"Audio saved to {audio_file_path}")
 
@@ -91,8 +82,8 @@ class AudioRecorder:
             data = self.io_device.readAll()
             available_samples = data.size() // RESOLUTION
 
-            # Write the audio data to the temporary file
-            self.audio_file.write(data.data())
+            # Append the audio data to the bytearray
+            self.audio_data.extend(data.data())
 
             # Update the time label
             self.update_time_label()

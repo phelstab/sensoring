@@ -2,28 +2,24 @@ import time
 import cv2
 from PySide6.QtCore import Qt, QThread, QTimer
 from PySide6.QtGui import QImage
-from PySide6.QtMultimedia import (
-    QAudioFormat,
-    QAudioSource,
-    QMediaDevices,
-)
+from PySide6.QtMultimedia import QAudioFormat, QAudioSource, QMediaDevices
 from ..signals import all_signals
 from ...pyk4a import Device
 from ...pyk4a.utils import colorize
 import wave
-import tempfile
 
 RESOLUTION = 4
 
 class RecordSensors(QThread):
-    def __init__(self, device: Device, video_file_path: str) -> None:
+    def __init__(self, device: Device, video_file_path: str, audio_file_path: str) -> None:
         super().__init__()
         self.device = device
         self.video_file_path = video_file_path
+        self.audio_file_path = audio_file_path
         self.audio_input = None
         self.input_devices = QMediaDevices.audioInputs()
-        self.is_audio_recording = False  # Flag to check if audio recording is active
-        self.start_time = None  # Initialize start_time
+        self.is_audio_recording = False
+        self.start_time = None
 
         dict_fps = {0: "5", 1: "15", 2: "30"}
         self.device_fps = int(dict_fps[self.device.configuration.camera_fps])
@@ -31,6 +27,8 @@ class RecordSensors(QThread):
         self.timer = QTimer()
         self.timer.setInterval(1000 / self.device_fps)
         self.timer.timeout.connect(self.update_next_frame)
+
+        self.io_device = None
 
     def update_next_frame(self):
         current_frame = self.device.update()
@@ -42,8 +40,8 @@ class RecordSensors(QThread):
         if current_rgb_frame[0]:
             rgb_frame = cv2.cvtColor(current_rgb_frame[1], cv2.COLOR_BGR2RGB)
             h, w, ch = rgb_frame.shape
-            rgb_frame = QImage(rgb_frame, w, h, ch * w, QImage.Format_RGB888)    
-            all_signals.record_signals.rgb_image.emit(rgb_frame)            
+            rgb_frame = QImage(rgb_frame, w, h, ch * w, QImage.Format_RGB888)
+            all_signals.record_signals.rgb_image.emit(rgb_frame)
 
         if current_depth_frame[0]:
             depth_frame = colorize(current_depth_frame[1], (None, 5000), cv2.COLORMAP_HSV)
@@ -61,48 +59,59 @@ class RecordSensors(QThread):
         acc_data = current_imu_data.acc
         gyro_data = current_imu_data.gyro
 
-        # Audio
-        if self.is_audio_recording:
-            data = self.io_device.readAll()
-            available_samples = data.size() // RESOLUTION
-            
-            # Write the audio data to the temporary file
-            self.audio_file.write(data.data())
-            all_signals.record_signals.audio_data.emit([data, available_samples])
-
         all_signals.record_signals.video_fps.emit(int(self.device_fps))
         all_signals.record_signals.record_time.emit((end_time - self.start_time))
         all_signals.record_signals.imu_acc_data.emit(acc_data)
         all_signals.record_signals.imu_gyro_data.emit(gyro_data)
 
+    def read_audio_data(self):
+        if self.is_audio_recording:
+            data = self.io_device.readAll()
+            available_samples = data.size() // RESOLUTION
+
+            # Append the audio data to the bytearray
+            self.audio_data.extend(data.data())
+            return data, available_samples
+        return None, 0
+
     def start_audio(self):
         self.ready_audio()
         self.io_device = self.audio_input.start()
-        self.is_audio_recording = True  # Set the flag to True
-        
-        # Create a temporary file for storing the audio data
-        self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        self.is_audio_recording = True
+
+        # Clear the audio data
+        self.audio_data = bytearray()
+
+        # Start a timer to read audio data periodically
+        self.audio_timer = QTimer()
+        self.audio_timer.setInterval(1000 / self.device_fps)  # IMPORTANT MUST BE SET TO THE SAME AS THE VIDEO FRAME RATE if not => Time drift
+        self.audio_timer.timeout.connect(self.read_audio_data)
+        self.audio_timer.start()
 
     def stop_audio(self):
-        import os
         self.audio_input.stop()
         self.io_device = None
-        self.is_audio_recording = False  # Set the flag to False
+        self.is_audio_recording = False
 
-        # Close the temporary file
-        self.audio_file.close()
+        # Stop the timer
+        if self.audio_timer:
+            self.audio_timer.stop()
+            self.audio_timer = None
 
-        # Open the temporary file in binary mode
-        with open(self.audio_file.name, "rb") as temp_file:
-            audio_data = temp_file.read()
+        # Use the provided audio file path
+        audio_file_path = self.audio_file_path
 
-        # Use the same directory as the video file
-        audio_file_path = os.path.splitext(self.video_file_path)[0] + ".wav"
         with wave.open(audio_file_path, "wb") as wav_file:
             wav_file.setnchannels(7)
             wav_file.setsampwidth(2)  # 16-bit samples
             wav_file.setframerate(16000)
-            wav_file.writeframes(audio_data)
+            wav_file.writeframes(self.audio_data)
+
+        print(f"Audio saved to {audio_file_path}")
+        
+        # Calculate and print the milliseconds of the wav file
+        audio_duration_ms = len(self.audio_data) / (16000 * 7 * 2) * 1000
+        print(f"Audio duration: {audio_duration_ms:.2f} milliseconds")
 
     def ready_audio(self) -> None:
         format_audio = QAudioFormat()

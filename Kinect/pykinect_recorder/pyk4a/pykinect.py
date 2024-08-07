@@ -56,12 +56,17 @@ def start_device(
     config=default_configuration,
     record=False,
     record_filepath="output.mkv",
+    audio_filepath="output.wav"
 ):
     # Create device object
     device = Device(device_index)
 
     # Start device
     device.start(config, record, record_filepath)
+
+    # Store the audio file path in the device object
+    if record:
+        device.audio_filepath = audio_filepath
 
     return device
 

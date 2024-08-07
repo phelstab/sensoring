@@ -24,11 +24,10 @@ from ...pyk4a.pykinect import start_device
 SAMPLE_COUNT = 10000
 RESOLUTION = 4
 
-
 class SensorViewer(QFrame):
     def __init__(self) -> None:
         super().__init__()
-        
+
         self.setMinimumSize(QSize(920, 670))
         self.setMaximumSize(QSize(1190, 1030))
         self.setContentsMargins(0, 0, 0, 0)
@@ -58,14 +57,14 @@ class SensorViewer(QFrame):
         self.v_line.setSpacing(0)
         self.v_line.setContentsMargins(0, 0, 0, 0)
         self.v_line.addWidget(VLine())
-        
+
         self.sensor_data_layout.addWidget(self.imu_senser)
         self.sensor_data_layout.addLayout(self.v_line)
         self.sensor_data_layout.addWidget(self.audio_sensor)
         self.frame_subdata = Frame(
-            "IMU & Audio Sensor", 
-            layout=self.sensor_data_layout, 
-            min_size=(460, 330), 
+            "IMU & Audio Sensor",
+            layout=self.sensor_data_layout,
+            min_size=(460, 330),
             max_size=(595, 510)
         )
 
@@ -82,13 +81,13 @@ class SensorViewer(QFrame):
         self.is_record = True
         self.setLayout(self.main_layout)
 
-        # UI option signals 
+        # UI option signals
         all_signals.option_signals.save_filepath.connect(self.set_base_path)
         all_signals.option_signals.sidebar_toggle.connect(self.set_config)
         all_signals.option_signals.device_option.connect(self.select_option)
         all_signals.option_signals.camera_option.connect(self.set_config)
         all_signals.option_signals.clear_frame.connect(self.clear_frame)
-        
+
         # Recording signals
         all_signals.record_signals.rgb_image.connect(self.set_rgb_image)
         all_signals.record_signals.depth_image.connect(self.set_depth_image)
@@ -119,11 +118,12 @@ class SensorViewer(QFrame):
             self.set_filename()
             for k, v in self.emit_configs["color"].items():
                 setattr(self.config, k, v)
-                
+
             self.device = start_device(
-                config=self.config, 
-                record=self.is_record, 
-                record_filepath=self.filename_video
+                config=self.config,
+                record=self.is_record,
+                record_filepath=self.filename_video,
+                audio_filepath=self.filename_audio
             )
             setattr(self.config, "depth_mode", self.emit_configs["depth_mode"])
             for k, v in self.emit_configs["color_option"].items():
@@ -131,20 +131,20 @@ class SensorViewer(QFrame):
                     self.device._handle, color_command_dict[k], K4A_COLOR_CONTROL_MODE_MANUAL, ctypes.c_int32(int(v))
                 )
 
-            self.viewer = RecordSensors(device=self.device, video_file_path=self.filename_video)
-            
+            self.viewer = RecordSensors(device=self.device, video_file_path=self.filename_video, audio_file_path=self.filename_audio)
+
             if self.is_record:
                 self.viewer.start_audio()
-            
-            self.viewer.start_time = time.time()  # Set start_time when the timer starts
+
+            self.viewer.start_time = time.time()
             self.viewer.timer.start()
             self.is_play = False
         else:
             self.viewer.timer.stop()
-            
+
             if self.is_record:
                 self.viewer.stop_audio()
-                
+
             self.viewer.quit()
             self.device.close()
             self.is_play = True
@@ -152,6 +152,7 @@ class SensorViewer(QFrame):
             if self.is_record:
                 wait_dialog = CustomProgressBarDialog(msec=500)
                 wait_dialog.show()
+
     def set_filename(self) -> None:
         if self.base_path is None:
             self.base_path = os.path.join(Path.home(), "Videos")
@@ -160,8 +161,9 @@ class SensorViewer(QFrame):
         filename = filename.strftime("%Y_%m_%d_%H_%M_%S")
 
         self.filename_video = os.path.join(self.base_path, f"{filename}.mkv")
+        self.filename_audio = os.path.join(self.base_path, f"{filename}.wav")
         if sys.flags.debug:
-            print(self.base_path, self.filename_video)
+            print(self.base_path, self.filename_video, self.filename_audio)
 
     @Slot(dict)
     def set_config(self, value: dict) -> None:
@@ -260,7 +262,6 @@ class SensorViewer(QFrame):
 
     @Slot(float)
     def set_gyro_data(self, values) -> None:
-        # self.imu_senser.label_gyro_x.setText("X : %.5f" % values[0])
         self.imu_senser.label_gyro_x.setText(f"X : {values[0]:.5f}")
         self.imu_senser.label_gyro_y.setText("Y : %.5f" % values[1])
         self.imu_senser.label_gyro_z.setText("Z : %.5f" % values[2])
@@ -277,7 +278,7 @@ class SensorViewer(QFrame):
         for s in range(start, SAMPLE_COUNT):
             value = (ord(values[0][data_index]) - 128) / 128
             self.buffer[s].setY(value)
-            data_index = data_index + RESOLUTION
+            data_index += RESOLUTION
 
         self.audio_sensor.series.replace(self.buffer)
 
@@ -297,4 +298,3 @@ class SensorViewer(QFrame):
         self.imu_senser.label_gyro_x.setText("X : ")
         self.imu_senser.label_gyro_y.setText("Y : ")
         self.imu_senser.label_gyro_z.setText("Z : ")
-    
