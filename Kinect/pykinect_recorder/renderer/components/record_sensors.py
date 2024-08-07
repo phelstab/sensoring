@@ -1,5 +1,4 @@
 import time
-
 import cv2
 from PySide6.QtCore import Qt, QThread, QTimer
 from PySide6.QtGui import QImage
@@ -8,15 +7,13 @@ from PySide6.QtMultimedia import (
     QAudioSource,
     QMediaDevices,
 )
-
 from ..signals import all_signals
 from ...pyk4a import Device
 from ...pyk4a.utils import colorize
-
 import wave
 import tempfile
-RESOLUTION = 4
 
+RESOLUTION = 4
 
 class RecordSensors(QThread):
     def __init__(self, device: Device, video_file_path: str) -> None:
