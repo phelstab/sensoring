@@ -239,7 +239,6 @@ class PolarH10:
             time_step = 1.0/ self.ECG_SAMPLING_FREQ
             samples = data[10:]
             n_samples = math.floor(len(samples)/step)
-            offset = 0
             recordDuration = (n_samples-1)*time_step
 
             if self.first_ecg_record:
@@ -249,6 +248,7 @@ class PolarH10:
                 self.first_ecg_record = False
 
             sample_timestamp = timestamp - recordDuration + self.polar_to_epoch_s
+            offset = 0
             while offset < len(samples):
                 ecg = PolarH10.convert_array_to_signed_int(samples, offset, step)       
                 offset += step

@@ -16,7 +16,6 @@ if __name__ == "__main__":
     asyncio.set_event_loop(loop)
     
     plot = View()
-    plot.setWindowTitle("Rolling Plot")
     plot.resize(1200, 600)
     plot.show()
 
