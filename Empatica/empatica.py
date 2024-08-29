@@ -2,7 +2,7 @@ import sys
 import socket
 import csv
 import time
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
 from PySide6.QtCore import QThread, Signal
 import pyqtgraph as pg
 
@@ -25,10 +25,30 @@ class DataReceiver(QThread):
         sock.sendall(f'device_connect {device_id}\r\n'.encode())
         sock.recv(1024)
 
-        # streams = ['acc', 'bvp', 'gsr', 'tmp', 'ibi', 'hr']
-        streams = ["acc","bat","bvp","gsr","ibi","tag","tmp"]
+        streams = [
+            "acc",
+            "bat",
+            "bvp",
+            "gsr",
+            "ibi",
+            "tag",
+            "tmp"
+            ]
+        # source: https://developer.empatica.com/windows-streaming-server-commands.html
+        # STREAM SUBSCRIPTIONS
+        # The available stream subscriptions are:
+
+        # acc - 3-axis acceleration
+        # bvp - Blood Volume Pulse
+        # gsr - Galvanic Skin Response
+        # ibi - Interbeat Interval and Heartbeat
+        # tmp - Skin Temperature
+        # bat - Device Battery
+        # tag - Tag taken from the device (by pressing the button)
+
         for stream in streams:
             print(stream)
+            time.sleep(0.7)
             sock.sendall(f'device_subscribe {stream} ON\r\n'.encode())
             sock.recv(1024)
 
@@ -51,12 +71,25 @@ class MainWindow(QWidget):
         self.ibi_plot = pg.PlotWidget(title='Interbeat Interval')
         self.hr_plot = pg.PlotWidget(title='Heart Rate')
 
+        self.acc_timestamp_label = QLabel()
+        self.bvp_timestamp_label = QLabel()
+        self.gsr_timestamp_label = QLabel()
+        self.tmp_timestamp_label = QLabel()
+        self.ibi_timestamp_label = QLabel()
+        self.hr_timestamp_label = QLabel()
+
         layout.addWidget(self.acc_plot)
+        layout.addWidget(self.acc_timestamp_label)
         layout.addWidget(self.bvp_plot)
+        layout.addWidget(self.bvp_timestamp_label)
         layout.addWidget(self.gsr_plot)
+        layout.addWidget(self.gsr_timestamp_label)
         layout.addWidget(self.tmp_plot)
+        layout.addWidget(self.tmp_timestamp_label)
         layout.addWidget(self.ibi_plot)
+        layout.addWidget(self.ibi_timestamp_label)
         layout.addWidget(self.hr_plot)
+        layout.addWidget(self.hr_timestamp_label)
 
         self.log_button = QPushButton('Start Logging')
         self.log_button.clicked.connect(self.toggle_logging)
@@ -95,46 +128,56 @@ class MainWindow(QWidget):
         self.data_receiver = DataReceiver()
         self.data_receiver.data_received.connect(self.update_plot)
         self.data_receiver.start()
+
     def update_plot(self, data):
         parts = data.split()
         if len(parts) >= 3 and parts[0].startswith('E4_'):
             stream_type, timestamp, *values = parts
             timestamp = float(timestamp)
-            nanoseconds = int(timestamp * 1e9)
+            milliseconds = int(timestamp * 1e3)
+            formatted_time = time.strftime("%H:%M:%S", time.localtime(timestamp)) + f".{milliseconds % 1000:03d}"
 
             if self.logging_enabled:
-                self.write_to_file(stream_type, nanoseconds, values)
+                self.write_to_file(stream_type, milliseconds, values)
 
             if stream_type == 'E4_Acc':
                 if len(values) == 3:
                     x, y, z = map(float, values)
                     self.acc_data.append((timestamp, x, y, z))
                     self.acc_curve.setData([d[0] for d in self.acc_data[-100:]], [d[1] for d in self.acc_data[-100:]])
+                    self.acc_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Bvp':
                 value = float(values[0])
                 self.bvp_data.append((timestamp, value))
                 self.bvp_curve.setData([d[0] for d in self.bvp_data[-100:]], [d[1] for d in self.bvp_data[-100:]])
+                self.bvp_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Gsr':
                 value = float(values[0])
                 self.gsr_data.append((timestamp, value))
                 self.gsr_curve.setData([d[0] for d in self.gsr_data[-100:]], [d[1] for d in self.gsr_data[-100:]])
+                self.gsr_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Temperature':
                 value = float(values[0])
                 self.tmp_data.append((timestamp, value))
                 self.tmp_curve.setData([d[0] for d in self.tmp_data[-100:]], [d[1] for d in self.tmp_data[-100:]])
+                self.tmp_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Ibi':
                 value = float(values[0])
                 self.ibi_data.append((timestamp, value))
                 self.ibi_curve.setData([d[0] for d in self.ibi_data[-100:]], [d[1] for d in self.ibi_data[-100:]])
+                self.ibi_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
+                print(f"Received Ibi: {value}")
 
             elif stream_type == 'E4_Hr':
                 value = float(values[0])
                 self.hr_data.append((timestamp, value))
                 self.hr_curve.setData([d[0] for d in self.hr_data[-100:]], [d[1] for d in self.hr_data[-100:]])
+                self.hr_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
+                print(f"Received HR: {value}")
         else:
             print(f"Received non-data message: {data}")
             if self.logging_enabled:
@@ -176,7 +219,7 @@ class MainWindow(QWidget):
             self.acc_file = open('acc_data.csv', 'w', newline='')
             self.bvp_file = open('bvp_data.csv', 'w', newline='')
             self.gsr_file = open('gsr_data.csv', 'w', newline='')
-            self.tmp_file = open('tmp_data.csv', 'w', newline='')
+            self.tmp_file = open('temp_data.csv', 'w', newline='')
             self.ibi_file = open('ibi_data.csv', 'w', newline='')
             self.hr_file = open('hr_data.csv', 'w', newline='')
             self.non_data_file = open('non_data_log.csv', 'w', newline='')
