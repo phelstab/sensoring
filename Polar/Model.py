@@ -2,7 +2,7 @@ import numpy as np
 import asyncio
 from PolarH10 import PolarH10
 import time
-from Pacer import Pacer
+# from Pacer import Pacer
 from scipy import signal
 
 class Model:
@@ -10,7 +10,7 @@ class Model:
     def __init__(self):
         
         self.polar_sensor = None
-        self.pacer = Pacer()
+        # self.pacer = Pacer()
         self.breathing_circle_radius = -0.5
         self.hr_circle_radius = -0.5
 
@@ -71,7 +71,7 @@ class Model:
         self.hrv_psd_values_hist = []
 
         self.hr_coherence = np.nan
-        self.br_coherence = np.nan
+        # self.br_coherence = np.nan
         
         self.br_values_hist = np.full(self.BR_HIST_SIZE, np.nan)
         self.br_times_hist = np.full(self.BR_HIST_SIZE, np.nan) 
@@ -80,10 +80,10 @@ class Model:
         self.rmssd_values_hist = np.full(self.BR_HIST_SIZE, np.nan)
         self.maxmin_values_hist = np.full(self.BR_HIST_SIZE, np.nan) # Max-min HR in a breathing cycle
 
-        self.br_pace_values_hist = np.full(self.BR_HIST_SIZE, np.nan)
+        # self.br_pace_values_hist = np.full(self.BR_HIST_SIZE, np.nan)
 
         self.hr_extrema_ids = np.full(self.HRV_HIST_SIZE, -1, dtype=int)
-        self.breath_cycle_ids = np.full(self.BR_HIST_SIZE, -1, dtype=int)
+        # self.breath_cycle_ids = np.full(self.BR_HIST_SIZE, -1, dtype=int)
         
     def set_polar_sensor(self, device):
         self.polar_sensor = PolarH10(device)
@@ -155,12 +155,12 @@ class Model:
         hrv_psd_interp = np.interp(hrv_psd_freqs_interp, self.hrv_psd_freqs_hist, self.hrv_psd_values_hist)
         
         # Calculating total power and peak power
-        pacer_freq = self.pacer.last_breathing_rate/60.0
+        # pacer_freq = self.pacer.last_breathing_rate/60.0
         total_power = np.trapz(hrv_psd_interp, hrv_psd_freqs_interp)
-        peak_indices = np.where((hrv_psd_freqs_interp >= pacer_freq - 0.015) & (hrv_psd_freqs_interp <= pacer_freq + 0.015)) # 0.03 Hz around the peak is recommended by R. McCraty
-        peak_power = np.trapz(hrv_psd_interp[peak_indices], hrv_psd_freqs_interp[peak_indices])
+        # peak_indices = np.where((hrv_psd_freqs_interp >= pacer_freq - 0.015) & (hrv_psd_freqs_interp <= pacer_freq + 0.015)) # 0.03 Hz around the peak is recommended by R. McCraty
+        # peak_power = np.trapz(hrv_psd_interp[peak_indices], hrv_psd_freqs_interp[peak_indices])
 
-        self.hr_coherence = peak_power/total_power
+        # self.hr_coherence = peak_power/total_power
 
     async def update_ibi(self):
         await self.polar_sensor.start_hr_stream()
@@ -199,8 +199,8 @@ class Model:
             self.br_values_hist = np.roll(self.br_values_hist, -1)
             self.br_values_hist[-1] = self.current_br
 
-            self.br_pace_values_hist = np.roll(self.br_pace_values_hist, -1)
-            self.br_pace_values_hist[-1] = 0
+            # self.br_pace_values_hist = np.roll(self.br_pace_values_hist, -1)
+            # self.br_pace_values_hist[-1] = 0
 
             self.br_times_hist = np.roll(self.br_times_hist, -1)
             self.br_times_hist[-1] = self.breath_acc_times[-1]
@@ -216,8 +216,8 @@ class Model:
             self.br_values_hist = np.roll(self.br_values_hist, -1)
             self.br_values_hist[-1] = self.current_br
 
-            self.br_pace_values_hist = np.roll(self.br_pace_values_hist, -1)
-            self.br_pace_values_hist[-1] = self.pacer.last_breathing_rate  
+            # self.br_pace_values_hist = np.roll(self.br_pace_values_hist, -1)
+            # self.br_pace_values_hist[-1] = self.pacer.last_breathing_rate  
 
             self.br_times_hist = np.roll(self.br_times_hist, -1)
             self.br_times_hist[-1] = self.breath_acc_times[-1]
@@ -255,10 +255,10 @@ class Model:
         # Calculating total power and peak power
         pacer_freq = self.pacer.last_breathing_rate/60.0
         total_power = np.trapz(br_psd_interp, br_psd_freqs_interp)
-        peak_indices = np.where((br_psd_freqs_interp >= pacer_freq - 0.015) & (br_psd_freqs_interp <= pacer_freq + 0.015)) # 0.03 Hz around the peak is recommended by R. McCraty
-        peak_power = np.trapz(br_psd_interp[peak_indices], br_psd_freqs_interp[peak_indices])
+        # peak_indices = np.where((br_psd_freqs_interp >= pacer_freq - 0.015) & (br_psd_freqs_interp <= pacer_freq + 0.015)) # 0.03 Hz around the peak is recommended by R. McCraty
+        # peak_power = np.trapz(br_psd_interp[peak_indices], br_psd_freqs_interp[peak_indices])
 
-        self.br_coherence = peak_power/total_power
+        # self.br_coherence = peak_power/total_power
 
     def update_acc_vectors(self, acc):
         # Update the gravity acc estimate (intialised to the first value)
@@ -271,61 +271,61 @@ class Model:
         acc_zero_centred = acc - self.acc_gravity
         self.acc_zero_centred_exp_mean = self.ACC_MEAN_ALPHA*self.acc_zero_centred_exp_mean + (1-self.ACC_MEAN_ALPHA)*acc_zero_centred
 
-    def update_breathing_cycle(self):
-        # Returns new_breathing_cycle
+    # def update_breathing_cycle(self):
+    #     # Returns new_breathing_cycle
 
-        self.breath_cycle_ids = self.breath_cycle_ids - 1
-        self.breath_cycle_ids[self.breath_cycle_ids < -1] = -1
+    #     self.breath_cycle_ids = self.breath_cycle_ids - 1
+    #     self.breath_cycle_ids[self.breath_cycle_ids < -1] = -1
 
-        current_br_phase = np.sign(self.breath_acc_hist[-1])
+    #     current_br_phase = np.sign(self.breath_acc_hist[-1])
 
-        # Exit if the phase hasn't changed or is non-negative
-        if current_br_phase == self.br_last_phase or current_br_phase >= 0:
-            self.br_last_phase = current_br_phase
-            return 0
+    #     # Exit if the phase hasn't changed or is non-negative
+    #     if current_br_phase == self.br_last_phase or current_br_phase >= 0:
+    #         self.br_last_phase = current_br_phase
+    #         return 0
 
-        # Calculate the breathing rate
-        self.current_br = 60.0 / (self.breath_acc_times[-1] - self.br_times_hist[-1])
+    #     # Calculate the breathing rate
+    #     self.current_br = 60.0 / (self.breath_acc_times[-1] - self.br_times_hist[-1])
         
-        # Filter out high breathing rates
-        if self.current_br > self.BR_MAX_FILTER:
-            return 0 
+    #     # Filter out high breathing rates
+    #     if self.current_br > self.BR_MAX_FILTER:
+    #         return 0 
 
-        # Save the index of the end of the cycle, the point of descending zero-crossing
-        self.breath_cycle_ids = np.roll(self.breath_cycle_ids, -1)
-        self.breath_cycle_ids[-1] = self.BR_ACC_HIST_SIZE - 1
+    #     # Save the index of the end of the cycle, the point of descending zero-crossing
+    #     self.breath_cycle_ids = np.roll(self.breath_cycle_ids, -1)
+    #     self.breath_cycle_ids[-1] = self.BR_ACC_HIST_SIZE - 1
 
-        self.br_last_phase = current_br_phase
+    #     self.br_last_phase = current_br_phase
 
-        if self.breath_cycle_ids[-2] < 0:
-            return 0
-        else: 
-            return 1
+    #     if self.breath_cycle_ids[-2] < 0:
+    #         return 0
+    #     else: 
+    #         return 1
 
-    def update_breathing_acc(self, t):
-        # Returns new_breathing_acc
+    # def update_breathing_acc(self, t):
+    #     # Returns new_breathing_acc
 
-        if t - self.t_last_breath_acc_update > 1/self.BR_ACC_SAMPLE_RATE:
-            self.breath_acc_hist = np.roll(self.breath_acc_hist, -1)
-            self.breath_acc_hist[-1] = np.dot(self.acc_zero_centred_exp_mean, self.acc_principle_axis)
-            self.breath_acc_times = np.roll(self.breath_acc_times, -1)
-            self.breath_acc_times[-1] = t
-            self.t_last_breath_acc_update = t
-            return 1
-        else:  
-            return 0
+    #     if t - self.t_last_breath_acc_update > 1/self.BR_ACC_SAMPLE_RATE:
+    #         self.breath_acc_hist = np.roll(self.breath_acc_hist, -1)
+    #         self.breath_acc_hist[-1] = np.dot(self.acc_zero_centred_exp_mean, self.acc_principle_axis)
+    #         self.breath_acc_times = np.roll(self.breath_acc_times, -1)
+    #         self.breath_acc_times[-1] = t
+    #         self.t_last_breath_acc_update = t
+    #         return 1
+    #     else:  
+    #         return 0
 
-    def get_breath_circle_coords(self):
+    # def get_breath_circle_coords(self):
         
-        if ~np.isnan(self.breath_acc_hist[-1]):
-            self.breathing_circle_radius = 0.7*self.breath_acc_hist[-1] + (1-0.7)*self.breathing_circle_radius
-        else: 
-            self.breathing_circle_radius = -0.5
-        self.breathing_circle_radius = np.min([np.max([self.breathing_circle_radius + 0.5, 0]), 1])
+    #     if ~np.isnan(self.breath_acc_hist[-1]):
+    #         self.breathing_circle_radius = 0.7*self.breath_acc_hist[-1] + (1-0.7)*self.breathing_circle_radius
+    #     else: 
+    #         self.breathing_circle_radius = -0.5
+    #     self.breathing_circle_radius = np.min([np.max([self.breathing_circle_radius + 0.5, 0]), 1])
 
-        x = self.breathing_circle_radius * self.pacer.cos_theta
-        y = self.breathing_circle_radius * self.pacer.sin_theta
-        return (x, y)
+    #     x = self.breathing_circle_radius * self.pacer.cos_theta
+    #     y = self.breathing_circle_radius * self.pacer.sin_theta
+    #     return (x, y)
 
     async def update_acc(self): # pmd: polar measurement data
         
@@ -343,15 +343,15 @@ class Model:
                 self.update_acc_vectors(acc)
 
                 # Update breathing acceleration history
-                new_breathing_acc = self.update_breathing_acc(t)
+                # new_breathing_acc = self.update_breathing_acc(t)
 
                 # Update the breathing acceleration history
-                if new_breathing_acc:
-                    self.update_breathing_spectrum()
-                    new_breathing_cycle = self.update_breathing_cycle()
+                # if new_breathing_acc:
+                    # self.update_breathing_spectrum()
+                    # new_breathing_cycle = self.update_breathing_cycle()
                     
-                    if new_breathing_cycle:
-                        self.update_breathing_rate()
+                    # if new_breathing_cycle:
+                    #     self.update_breathing_rate()
 
 
     

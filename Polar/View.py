@@ -245,27 +245,27 @@ class View(QChartView):
         self.hrv_band_2.setOpacity(0.2)
         self.hrv_band_2.setPen(QPen(Qt.NoPen))
 
-        self.pacer_slider = QSlider(Qt.Horizontal)
-        self.pacer_slider.setRange(3*2,10*2)
-        self.pacer_slider.setValue(self.pacer_rate*2)
-        self.pacer_slider.valueChanged.connect(self.update_pacer_rate)
+        # self.pacer_slider = QSlider(Qt.Horizontal)
+        # self.pacer_slider.setRange(3*2,10*2)
+        # self.pacer_slider.setValue(self.pacer_rate*2)
+        # self.pacer_slider.valueChanged.connect(self.update_pacer_rate)
         
-        self.pacer_label = QLabel()
-        self.pacer_label.setStyleSheet("QLabel {color: black}")
-        self.pacer_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.pacer_label.setText(f"{self.pacer_rate}")
-        self.pacer_label.setFixedWidth(40)
+        # self.pacer_label = QLabel()
+        # self.pacer_label.setStyleSheet("QLabel {color: black}")
+        # self.pacer_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        # self.pacer_label.setText(f"{self.pacer_rate}")
+        # self.pacer_label.setFixedWidth(40)
         
         # Configure
-        self.chart_acc.addSeries(self.series_pacer)
+        # self.chart_acc.addSeries(self.series_pacer)
         self.chart_acc.addSeries(self.series_breath_acc)
         self.chart_acc.addSeries(self.series_breath_cycle_marker)
         self.chart_acc.addSeries(self.series_hr)
         self.chart_acc.addAxis(self.axis_acc_x, Qt.AlignBottom)
         self.chart_acc.addAxis(self.axis_y_breath_acc, Qt.AlignRight)
         self.chart_acc.addAxis(self.axis_hr_y, Qt.AlignLeft)
-        self.series_pacer.attachAxis(self.axis_acc_x)
-        self.series_pacer.attachAxis(self.axis_y_breath_acc)
+        # self.series_pacer.attachAxis(self.axis_acc_x)
+        # self.series_pacer.attachAxis(self.axis_y_breath_acc)
         self.series_breath_acc.attachAxis(self.axis_acc_x)
         self.series_breath_acc.attachAxis(self.axis_y_breath_acc)
         self.series_breath_cycle_marker.attachAxis(self.axis_acc_x)
@@ -310,26 +310,26 @@ class View(QChartView):
         hrv_widget = QChartView(self.chart_hrv)
         hrv_widget.setStyleSheet("background-color: transparent;")
     
-        self.circles_widget = CirclesWidget(*self.model.pacer.update(self.pacer_rate), self.GOLD, self.BLUE, self.RED)
+        # self.circles_widget = CirclesWidget(*self.model.pacer.update(self.pacer_rate), self.GOLD, self.BLUE, self.RED)
         
         acc_widget.setRenderHint(QPainter.Antialiasing)
         hrv_widget.setRenderHint(QPainter.Antialiasing)
-        self.circles_widget.setRenderHint(QPainter.Antialiasing)
+        # self.circles_widget.setRenderHint(QPainter.Antialiasing)
 
-        sliderLayout = QHBoxLayout()
-        sliderLayout.addWidget(self.pacer_label)
-        sliderLayout.addWidget(self.pacer_slider)
-        sliderLayout.addSpacing(20)
+        # sliderLayout = QHBoxLayout()
+        # sliderLayout.addWidget(self.pacer_label)
+        # sliderLayout.addWidget(self.pacer_slider)
+        # sliderLayout.addSpacing(20)
         
-        circlesLayout = QVBoxLayout()
-        circlesLayout.addWidget(self.circles_widget, alignment=Qt.AlignHCenter | Qt.AlignVCenter)
-        circlesLayout.addLayout(sliderLayout)
+        # circlesLayout = QVBoxLayout()
+        # circlesLayout.addWidget(self.circles_widget, alignment=Qt.AlignHCenter | Qt.AlignVCenter)
+        # circlesLayout.addLayout(sliderLayout)
 
-        squareContainer = SquareWidget()
-        squareContainer.setLayout(circlesLayout)
+        # squareContainer = SquareWidget()
+        # squareContainer.setLayout(circlesLayout)
 
         topRowLayout = QHBoxLayout()
-        topRowLayout.addWidget(squareContainer, stretch=1)
+        # topRowLayout.addWidget(squareContainer, stretch=1)
         topRowLayout.addWidget(acc_widget, stretch=3)
 
         layout.addLayout(topRowLayout, stretch=1)
@@ -346,17 +346,17 @@ class View(QChartView):
         self.update_acc_series_timer.timeout.connect(self.update_acc_series)
         self.update_acc_series_timer.setInterval(self.UPDATE_BREATHING_SERIES_PERIOD)
         
-        self.pacer_timer = QTimer()
-        self.pacer_timer.setInterval(self.UPDATE_PACER_PERIOD)  # ms (20 Hz)
-        self.pacer_timer.timeout.connect(self.plot_circles)
+        # self.pacer_timer = QTimer()
+        # self.pacer_timer.setInterval(self.UPDATE_PACER_PERIOD)  # ms (20 Hz)
+        # self.pacer_timer.timeout.connect(self.plot_circles)
 
         self.update_acc_series_timer.start()
         self.update_series_timer.start()
-        self.pacer_timer.start()
+        # self.pacer_timer.start()
 
-        self.pacer_values_hist = np.full((self.PACER_HIST_SIZE, 1), np.nan)
-        self.pacer_times_hist = np.full((self.PACER_HIST_SIZE, 1), np.nan)
-        self.pacer_times_hist_rel_s = np.full(self.PACER_HIST_SIZE, np.nan) # relative seconds
+        # self.pacer_values_hist = np.full((self.PACER_HIST_SIZE, 1), np.nan)
+        # self.pacer_times_hist = np.full((self.PACER_HIST_SIZE, 1), np.nan)
+        # self.pacer_times_hist_rel_s = np.full(self.PACER_HIST_SIZE, np.nan) # relative seconds
 
     def create_chart(self, title=None, showTitle=False, showLegend=False, margins=None):
         chart = QChart()
@@ -419,23 +419,23 @@ class View(QChartView):
             axis.setReverse(True)
         return axis        
 
-    def update_pacer_rate(self):
-        self.pacer_rate = self.pacer_slider.value()/2
-        self.pacer_label.setText(f"{self.pacer_slider.value()/2}")
+    # def update_pacer_rate(self):
+    #     self.pacer_rate = self.pacer_slider.value()/2
+    #     self.pacer_label.setText(f"{self.pacer_slider.value()/2}")
 
-    def plot_circles(self):
-        # Pacer
-        coordinates = self.model.pacer.update(self.pacer_rate)
-        self.circles_widget.update_pacer_series(*coordinates)
+    # def plot_circles(self):
+    #     # Pacer
+    #     coordinates = self.model.pacer.update(self.pacer_rate)
+    #     self.circles_widget.update_pacer_series(*coordinates)
 
-        self.pacer_values_hist = np.roll(self.pacer_values_hist, -1)
-        self.pacer_values_hist[-1] = np.linalg.norm([coordinates[0][0],coordinates[1][0]]) - 0.5
-        self.pacer_times_hist = np.roll(self.pacer_times_hist, -1)
-        self.pacer_times_hist[-1] = time.time_ns()/1.0e9
+    #     self.pacer_values_hist = np.roll(self.pacer_values_hist, -1)
+    #     self.pacer_values_hist[-1] = np.linalg.norm([coordinates[0][0],coordinates[1][0]]) - 0.5
+    #     self.pacer_times_hist = np.roll(self.pacer_times_hist, -1)
+    #     self.pacer_times_hist[-1] = time.time_ns()/1.0e9
 
-        # Breathing
-        breath_coordinates = self.model.get_breath_circle_coords()
-        self.circles_widget.update_breath_series(*breath_coordinates)
+    #     # Breathing
+    #     breath_coordinates = self.model.get_breath_circle_coords()
+    #     self.circles_widget.update_breath_series(*breath_coordinates)
 
     async def connect_polar(self):
         device_window = DeviceSelectionWindow(self)
@@ -460,7 +460,7 @@ class View(QChartView):
 
     def update_acc_series(self):
         
-        self.pacer_times_hist_rel_s = self.pacer_times_hist - time.time_ns()/1.0e9
+        # self.pacer_times_hist_rel_s = self.pacer_times_hist - time.time_ns()/1.0e9
             
         self.breath_acc_times_rel_s = self.model.breath_acc_times - time.time_ns()/1.0e9
         series_breath_acc_new = []
@@ -470,19 +470,19 @@ class View(QChartView):
                 series_breath_acc_new.append(QPointF(value, self.model.breath_acc_hist[i]))
         self.series_breath_acc.replace(series_breath_acc_new)
         
-        series_breath_cycle_marker_new = []
-        for i, value in enumerate(self.model.breath_cycle_ids):
-            if not value < 0:
-                series_breath_cycle_marker_new.append(QPointF(self.breath_acc_times_rel_s[value], self.model.breath_acc_hist[value]))
-        self.series_breath_cycle_marker.replace(series_breath_cycle_marker_new)
+        # series_breath_cycle_marker_new = []
+        # for i, value in enumerate(self.model.breath_cycle_ids):
+        #     if not value < 0:
+        #         series_breath_cycle_marker_new.append(QPointF(self.breath_acc_times_rel_s[value], self.model.breath_acc_hist[value]))
+        # self.series_breath_cycle_marker.replace(series_breath_cycle_marker_new)
 
-        series_pacer_new = []
-        for i, value in enumerate(self.pacer_times_hist_rel_s):
-            if not np.isnan(value):
-                series_pacer_new.append(QPointF(value, self.pacer_values_hist[i]))
+        # series_pacer_new = []
+        # for i, value in enumerate(self.pacer_times_hist_rel_s):
+        #     if not np.isnan(value):
+        #         series_pacer_new.append(QPointF(value, self.pacer_values_hist[i]))
                 
-        if series_pacer_new:
-            self.series_pacer.replace(series_pacer_new)
+        # if series_pacer_new:
+        #     self.series_pacer.replace(series_pacer_new)
 
     def update_series(self):
 
