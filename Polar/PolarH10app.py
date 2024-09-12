@@ -6,6 +6,8 @@ from PySide6.QtCore import QThread, Signal, Slot, QObject
 import numpy as np
 import pyqtgraph as pg
 from collections import deque
+import csv
+import time
 
 class DeviceScanner(QThread):
     devices_found = Signal(list)
@@ -28,6 +30,7 @@ class PolarSensorWorker(QThread):
     def __init__(self, polar_sensor):
         super().__init__()
         self.polar_sensor = polar_sensor
+        self.recording_enabled = False
 
     async def connect_and_start_streams(self):
         await self.polar_sensor.connect()
@@ -45,19 +48,30 @@ class PolarSensorWorker(QThread):
             while not self.polar_sensor.ibi_queue_is_empty():
                 timestamp, ibi_data = self.polar_sensor.dequeue_ibi()
                 self.ibi_data.emit((timestamp, ibi_data))
+                if self.recording_enabled:
+                    self.write_to_csv('ibi_data.csv', [timestamp, ibi_data])
 
             while not self.polar_sensor.acc_queue_is_empty():
                 timestamp, acc_data = self.polar_sensor.dequeue_acc()
                 self.acc_data.emit((timestamp, acc_data))
+                if self.recording_enabled:
+                    self.write_to_csv('acc_data.csv', [timestamp] + list(acc_data))
 
             while not self.polar_sensor.ecg_queue_is_empty():
                 timestamp, ecg_data = self.polar_sensor.dequeue_ecg()
                 self.ecg_data.emit((timestamp, ecg_data))
+                if self.recording_enabled:
+                    self.write_to_csv('ecg_data.csv', [timestamp, ecg_data])
 
             await asyncio.sleep(1)
 
     def run(self):
         asyncio.run(self.connect_and_start_streams())
+
+    def write_to_csv(self, filename, data):
+        with open(filename, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(data)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -68,6 +82,7 @@ class MainWindow(QMainWindow):
         self.device_list = QListWidget()
         self.refresh_button = QPushButton("Refresh")
         self.connect_button = QPushButton("Connect")
+        self.record_button = QPushButton("Record Data")
 
         self.ibi_plot = pg.PlotWidget(title='IBI Data')
         self.acc_plot = pg.PlotWidget(title='ACC Data')
@@ -77,6 +92,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.device_list)
         layout.addWidget(self.refresh_button)
         layout.addWidget(self.connect_button)
+        layout.addWidget(self.record_button)
         layout.addWidget(self.ibi_plot)
         layout.addWidget(self.acc_plot)
         layout.addWidget(self.ecg_plot)
@@ -87,6 +103,7 @@ class MainWindow(QMainWindow):
 
         self.refresh_button.clicked.connect(self.refresh_devices)
         self.connect_button.clicked.connect(self.connect_device)
+        self.record_button.clicked.connect(self.toggle_recording)
 
         self.scanner = DeviceScanner()
         self.scanner.devices_found.connect(self.update_device_list)
@@ -144,21 +161,18 @@ class MainWindow(QMainWindow):
     @Slot(tuple)
     def on_ibi_data(self, data):
         timestamp, ibi_data = data
-        # print(f"IBI data: {ibi_data} ms at {timestamp}")
         self.ibi_data.append((timestamp, ibi_data))
         self.update_ibi_plot()
 
     @Slot(tuple)
     def on_acc_data(self, data):
         timestamp, acc_data = data
-        # print(f"ACC data: {acc_data} at {timestamp}")
         self.acc_data.append((timestamp, acc_data))
         self.update_acc_plot()
 
     @Slot(tuple)
     def on_ecg_data(self, data):
         timestamp, ecg_data = data
-        # print(f"ECG data: {ecg_data} µV at {timestamp}")
         self.ecg_data.append((timestamp, ecg_data))
         self.update_ecg_plot()
 
@@ -179,6 +193,27 @@ class MainWindow(QMainWindow):
         if self.ecg_data:
             timestamps, values = zip(*self.ecg_data)
             self.ecg_curve.setData(np.array(timestamps).flatten(), np.array(values).flatten())
+
+    @Slot()
+    def toggle_recording(self):
+        if hasattr(self, 'sensor_worker'):
+            self.sensor_worker.recording_enabled = not self.sensor_worker.recording_enabled
+            if self.sensor_worker.recording_enabled:
+                self.record_button.setText("Stop Recording")
+                self.initialize_csv_files()
+            else:
+                self.record_button.setText("Record Data")
+
+    def initialize_csv_files(self):
+        with open('ibi_data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Timestamp', 'IBI'])
+        with open('acc_data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
+        with open('ecg_data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Timestamp', 'ECG'])
 
 if __name__ == "__main__":
     app = QApplication([])
