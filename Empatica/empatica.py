@@ -227,13 +227,13 @@ class MainWindow(QWidget):
 
     def toggle_logging(self):
         if not self.logging_enabled:
-            self.acc_file = open('acc_data.csv', 'w', newline='')
-            self.bvp_file = open('bvp_data.csv', 'w', newline='')
-            self.gsr_file = open('gsr_data.csv', 'w', newline='')
-            self.tmp_file = open('temp_data.csv', 'w', newline='')
-            self.ibi_file = open('ibi_data.csv', 'w', newline='')
-            self.hr_file = open('hr_data.csv', 'w', newline='')
-            self.non_data_file = open('non_data_log.csv', 'w', newline='')
+            self.acc_file = open('empatica_acc_data.csv', 'w', newline='')
+            self.bvp_file = open('empatica_bvp_data.csv', 'w', newline='')
+            self.gsr_file = open('empatica_gsr_data.csv', 'w', newline='')
+            self.tmp_file = open('empatica_temp_data.csv', 'w', newline='')
+            self.ibi_file = open('empatica_ibi_data.csv', 'w', newline='')
+            self.hr_file = open('empatica_hr_data.csv', 'w', newline='')
+            self.non_data_file = open('empatica_non_data_log.csv', 'w', newline='')
             self.acc_writer = csv.writer(self.acc_file)
             self.bvp_writer = csv.writer(self.bvp_file)
             self.gsr_writer = csv.writer(self.gsr_file)

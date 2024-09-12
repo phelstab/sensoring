@@ -216,13 +216,13 @@ class MainWindow(QMainWindow):
                 print("Recording stopped")
 
     def initialize_csv_files(self):
-        with open('ibi_data.csv', 'w', newline='') as file:
+        with open('polar_ibi_data.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'IBI'])
-        with open('acc_data.csv', 'w', newline='') as file:
+        with open('polar_acc_data.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
-        with open('ecg_data.csv', 'w', newline='') as file:
+        with open('polar_ecg_data.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'ECG'])
 
