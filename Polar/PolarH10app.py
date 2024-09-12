@@ -91,10 +91,6 @@ class MainWindow(QMainWindow):
         self.scanner = DeviceScanner()
         self.scanner.devices_found.connect(self.update_device_list)
 
-        # self.ibi_data = []
-        # self.acc_data = []
-        # self.ecg_data = []
-
         self.ibi_curve = self.ibi_plot.plot()
         self.acc_curve_x = self.acc_plot.plot(pen='r', name='X')
         self.acc_curve_y = self.acc_plot.plot(pen='g', name='Y')
