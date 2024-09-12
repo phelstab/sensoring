@@ -1,5 +1,8 @@
 python version: 3.11
 
+Build a executable file of the program
+pyinstaller --onefile main.py
+
 
 Video Codec of the .mkv:
 Metadata:
