@@ -50,4 +50,5 @@ zipp
 peakutils
 opencv-python
 open3d
+pynput
 pyqtgraph

@@ -3,8 +3,10 @@ import socket
 import csv
 import time
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtCore import QThread, Signal, Qt
 import pyqtgraph as pg
+from pynput import keyboard
+from collections import deque
 
 # E4 Streaming Server configuration
 SERVER_ADDRESS = '127.0.0.1'
@@ -97,12 +99,13 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-        self.acc_data = []
-        self.bvp_data = []
-        self.gsr_data = []
-        self.tmp_data = []
-        self.ibi_data = []
-        self.hr_data = []
+        self.buffer_size = 100
+        self.acc_data = deque(maxlen=self.buffer_size)
+        self.bvp_data = deque(maxlen=self.buffer_size)
+        self.gsr_data = deque(maxlen=self.buffer_size)
+        self.tmp_data = deque(maxlen=self.buffer_size)
+        self.ibi_data = deque(maxlen=self.buffer_size)
+        self.hr_data = deque(maxlen=self.buffer_size)
 
         self.acc_curve = self.acc_plot.plot()
         self.bvp_curve = self.bvp_plot.plot()
@@ -129,6 +132,14 @@ class MainWindow(QWidget):
         self.data_receiver.data_received.connect(self.update_plot)
         self.data_receiver.start()
 
+        # Set up keyboard listener
+        self.keyboard_listener = keyboard.Listener(on_press=self.on_key_press)
+        self.keyboard_listener.start()
+
+    def on_key_press(self, key):
+        if key == keyboard.KeyCode.from_char('#'):
+            self.toggle_logging()
+
     def update_plot(self, data):
         parts = data.split()
         if len(parts) >= 3 and parts[0].startswith('E4_'):
@@ -144,38 +155,38 @@ class MainWindow(QWidget):
                 if len(values) == 3:
                     x, y, z = map(float, values)
                     self.acc_data.append((timestamp, x, y, z))
-                    self.acc_curve.setData([d[0] for d in self.acc_data[-100:]], [d[1] for d in self.acc_data[-100:]])
+                    self.acc_curve.setData([d[0] for d in self.acc_data], [d[1] for d in self.acc_data])
                     self.acc_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Bvp':
                 value = float(values[0])
                 self.bvp_data.append((timestamp, value))
-                self.bvp_curve.setData([d[0] for d in self.bvp_data[-100:]], [d[1] for d in self.bvp_data[-100:]])
+                self.bvp_curve.setData([d[0] for d in self.bvp_data], [d[1] for d in self.bvp_data])
                 self.bvp_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Gsr':
                 value = float(values[0])
                 self.gsr_data.append((timestamp, value))
-                self.gsr_curve.setData([d[0] for d in self.gsr_data[-100:]], [d[1] for d in self.gsr_data[-100:]])
+                self.gsr_curve.setData([d[0] for d in self.gsr_data], [d[1] for d in self.gsr_data])
                 self.gsr_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Temperature':
                 value = float(values[0])
                 self.tmp_data.append((timestamp, value))
-                self.tmp_curve.setData([d[0] for d in self.tmp_data[-100:]], [d[1] for d in self.tmp_data[-100:]])
+                self.tmp_curve.setData([d[0] for d in self.tmp_data], [d[1] for d in self.tmp_data])
                 self.tmp_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
 
             elif stream_type == 'E4_Ibi':
                 value = float(values[0])
                 self.ibi_data.append((timestamp, value))
-                self.ibi_curve.setData([d[0] for d in self.ibi_data[-100:]], [d[1] for d in self.ibi_data[-100:]])
+                self.ibi_curve.setData([d[0] for d in self.ibi_data], [d[1] for d in self.ibi_data])
                 self.ibi_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
                 print(f"Received Ibi: {value}")
 
             elif stream_type == 'E4_Hr':
                 value = float(values[0])
                 self.hr_data.append((timestamp, value))
-                self.hr_curve.setData([d[0] for d in self.hr_data[-100:]], [d[1] for d in self.hr_data[-100:]])
+                self.hr_curve.setData([d[0] for d in self.hr_data], [d[1] for d in self.hr_data])
                 self.hr_timestamp_label.setText(f"Last Timestamp: {formatted_time}")
                 print(f"Received HR: {value}")
         else:
@@ -232,6 +243,7 @@ class MainWindow(QWidget):
             self.non_data_writer = csv.writer(self.non_data_file)
             self.log_button.setText('Stop Logging')
             self.logging_enabled = True
+            print("Logging started")
         else:
             self.acc_file.close()
             self.bvp_file.close()
@@ -242,6 +254,7 @@ class MainWindow(QWidget):
             self.non_data_file.close()
             self.log_button.setText('Start Logging')
             self.logging_enabled = False
+            print("Logging stopped")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

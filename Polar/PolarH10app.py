@@ -1,6 +1,6 @@
 import asyncio
 from bleak import BleakScanner
-from .PolarH10 import PolarH10
+from PolarH10 import PolarH10
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QListWidget, QMessageBox
 from PySide6.QtCore import QThread, Signal, Slot, QObject
 import numpy as np
@@ -8,6 +8,7 @@ import pyqtgraph as pg
 from collections import deque
 import csv
 import time
+from pynput import keyboard
 
 class DeviceScanner(QThread):
     devices_found = Signal(list)
@@ -120,6 +121,14 @@ class MainWindow(QMainWindow):
         self.acc_data = deque(maxlen=self.buffer_size)
         self.ecg_data = deque(maxlen=self.buffer_size)
 
+        # Set up keyboard listener
+        self.keyboard_listener = keyboard.Listener(on_press=self.on_key_press)
+        self.keyboard_listener.start()
+
+    def on_key_press(self, key):
+        if key == keyboard.KeyCode.from_char('#'):
+            self.toggle_recording()
+
     @Slot()
     def refresh_devices(self):
         self.device_list.clear()
@@ -201,8 +210,10 @@ class MainWindow(QMainWindow):
             if self.sensor_worker.recording_enabled:
                 self.record_button.setText("Stop Recording")
                 self.initialize_csv_files()
+                print("Recording started")
             else:
                 self.record_button.setText("Record Data")
+                print("Recording stopped")
 
     def initialize_csv_files(self):
         with open('ibi_data.csv', 'w', newline='') as file:
