@@ -1,6 +1,6 @@
 import asyncio
 from bleak import BleakScanner
-from PolarH10 import PolarH10
+from .PolarH10 import PolarH10
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QListWidget, QMessageBox
 from PySide6.QtCore import QThread, Signal, Slot, QObject
 import numpy as np
