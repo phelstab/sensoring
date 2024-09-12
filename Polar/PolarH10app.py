@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayou
 from PySide6.QtCore import QThread, Signal, Slot, QObject
 import numpy as np
 import pyqtgraph as pg
+from collections import deque
 
 class DeviceScanner(QThread):
     devices_found = Signal(list)
@@ -90,15 +91,21 @@ class MainWindow(QMainWindow):
         self.scanner = DeviceScanner()
         self.scanner.devices_found.connect(self.update_device_list)
 
-        self.ibi_data = []
-        self.acc_data = []
-        self.ecg_data = []
+        # self.ibi_data = []
+        # self.acc_data = []
+        # self.ecg_data = []
 
         self.ibi_curve = self.ibi_plot.plot()
         self.acc_curve_x = self.acc_plot.plot(pen='r', name='X')
         self.acc_curve_y = self.acc_plot.plot(pen='g', name='Y')
         self.acc_curve_z = self.acc_plot.plot(pen='b', name='Z')
         self.ecg_curve = self.ecg_plot.plot()
+
+        self.buffer_size = 1000
+
+        self.ibi_data = deque(maxlen=self.buffer_size)
+        self.acc_data = deque(maxlen=self.buffer_size)
+        self.ecg_data = deque(maxlen=self.buffer_size)
 
     @Slot()
     def refresh_devices(self):
