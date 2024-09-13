@@ -21,6 +21,7 @@ from ..signals import all_signals
 from ..common_widgets import ComboBox, Slider, HLine, ToggleButton, Label, LineEdit
 from ...pyk4a.k4a.configuration import Configuration
 from ...pyk4a.pykinect import start_device, initialize_libraries
+from pynput import keyboard
 
 
 class ViewerSidebar(QFrame):
@@ -70,6 +71,10 @@ class ViewerSidebar(QFrame):
         all_signals.option_signals.sidebar_toggle.connect(self.toggle_button)
         all_signals.record_signals.is_sidebar_enable.connect(self.enable_button)
 
+        self.listener = keyboard.Listener(on_press=self.on_press)
+        self.listener.start()
+
+
     def toggle_button(self):
         self.rgb_camera_panel._toggle()
         self.depth_camera_panel._toggle()
@@ -86,6 +91,14 @@ class ViewerSidebar(QFrame):
             self.depth_camera_panel.setEnabled(True)
             self.ir_camera_panel.setEnabled(True)
             self.is_run = False
+
+    def on_press(self, key):
+        if key == keyboard.KeyCode.from_char('#'):
+            self.btn_panel.toggle_recording()
+
+    def stop_listener(self):
+        if self.listener:
+            self.listener.stop()
 
 
 class BtnPanel(QFrame):
@@ -210,7 +223,7 @@ class BtnPanel(QFrame):
             return False
 
     def emit_option(self):
-        name = self.sender().objectName()
+        name = self.sender().objectName() if self.sender() else 'recorder'
         if self.is_run is False:
             if name == 'viewer':
                 self.btn_record.setEnabled(False)
@@ -253,6 +266,13 @@ class BtnPanel(QFrame):
             all_signals.option_signals.sidebar_toggle.emit(True)
             all_signals.option_signals.clear_frame.emit(True)
     
+    def toggle_recording(self):
+        if self.is_run:
+            self.emit_option()
+        else:
+            self.btn_record.click()
+
+
     @Slot(str)
     def set_device_serial_number(self, value: str):
         self.label_device_sn.setText(value)
