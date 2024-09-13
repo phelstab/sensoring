@@ -1,7 +1,7 @@
 python version: 3.11
 
 Build a executable file of the program
-pyinstaller --onefile main.py
+pyinstaller --clean --onefile --add-data "pykinect_recorder;pykinect_recorder" .\main.py
 pyinstaller --onefile --add-data "PolarH10.py;." .\PolarH10app.py
 
 Video Codec of the .mkv:

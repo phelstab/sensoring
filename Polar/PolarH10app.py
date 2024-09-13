@@ -2,7 +2,7 @@ import asyncio
 from bleak import BleakScanner
 from PolarH10 import PolarH10
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QListWidget, QMessageBox
-from PySide6.QtCore import QThread, Signal, Slot, QObject
+from PySide6.QtCore import QThread, Signal, Slot, QObject, QTimer
 import numpy as np
 import pyqtgraph as pg
 from collections import deque
@@ -25,9 +25,9 @@ class DeviceScanner(QThread):
 class PolarSensorWorker(QThread):
     connected = Signal()
     device_info = Signal(str)
-    ibi_data = Signal(tuple)  # Emit tuple (timestamp, ibi_data)
-    acc_data = Signal(tuple)  # Emit tuple (timestamp, acc_data)
-    ecg_data = Signal(tuple)  # Emit tuple (timestamp, ecg_data)
+    ibi_data = Signal(tuple)
+    acc_data = Signal(tuple)
+    ecg_data = Signal(tuple)
 
     def __init__(self, polar_sensor):
         super().__init__()
@@ -43,45 +43,56 @@ class PolarSensorWorker(QThread):
         }
         self.buffer_size = 1000
         self.buffer_count = 0
+        self.running = True
 
     async def connect_and_start_streams(self):
-        await self.polar_sensor.connect()
-        self.connected.emit()
+        try:
+            await self.polar_sensor.connect()
+            self.connected.emit()
 
-        await self.polar_sensor.get_device_info()
-        device_info = await self.polar_sensor.print_device_info()
-        self.device_info.emit(device_info)
+            await self.polar_sensor.get_device_info()
+            device_info = await self.polar_sensor.print_device_info()
+            self.device_info.emit(device_info)
 
-        await self.polar_sensor.start_hr_stream()
-        await self.polar_sensor.start_acc_stream()
-        await self.polar_sensor.start_ecg_stream()
+            await self.polar_sensor.start_hr_stream()
+            await self.polar_sensor.start_acc_stream()
+            await self.polar_sensor.start_ecg_stream()
 
-        while True:
-            while not self.polar_sensor.ibi_queue_is_empty():
-                timestamp, ibi_data = self.polar_sensor.dequeue_ibi()
-                self.ibi_data.emit((timestamp, ibi_data))
-                if self.recording_enabled:
-                    self.write_to_buffer('ibi', [timestamp, ibi_data])
+            while self.running:
+                await self.process_data()
+                await asyncio.sleep(0.01)
+        except Exception as e:
+            print(f"Error in connect_and_start_streams: {e}")
+        finally:
+            await self.polar_sensor.disconnect()
 
-            while not self.polar_sensor.acc_queue_is_empty():
-                timestamp, acc_data = self.polar_sensor.dequeue_acc()
-                self.acc_data.emit((timestamp, acc_data))
-                if self.recording_enabled:
-                    self.write_to_buffer('acc', [timestamp] + list(acc_data))
+    async def process_data(self):
+        while not self.polar_sensor.ibi_queue_is_empty():
+            timestamp, ibi_data = self.polar_sensor.dequeue_ibi()
+            self.ibi_data.emit((timestamp, ibi_data))
+            if self.recording_enabled:
+                self.write_to_buffer('ibi', [timestamp, ibi_data])
 
-            while not self.polar_sensor.ecg_queue_is_empty():
-                timestamp, ecg_data = self.polar_sensor.dequeue_ecg()
-                self.ecg_data.emit((timestamp, ecg_data))
-                if self.recording_enabled:
-                    self.write_to_buffer('ecg', [timestamp, ecg_data])
+        while not self.polar_sensor.acc_queue_is_empty():
+            timestamp, acc_data = self.polar_sensor.dequeue_acc()
+            self.acc_data.emit((timestamp, acc_data))
+            if self.recording_enabled:
+                self.write_to_buffer('acc', [timestamp] + list(acc_data))
 
-            if self.buffer_count >= self.buffer_size:
-                self.flush_buffers()
+        while not self.polar_sensor.ecg_queue_is_empty():
+            timestamp, ecg_data = self.polar_sensor.dequeue_ecg()
+            self.ecg_data.emit((timestamp, ecg_data))
+            if self.recording_enabled:
+                self.write_to_buffer('ecg', [timestamp, ecg_data])
 
-            await asyncio.sleep(0.1)
+        if self.buffer_count >= self.buffer_size:
+            self.flush_buffers()
 
     def run(self):
         asyncio.run(self.connect_and_start_streams())
+
+    def stop(self):
+        self.running = False
 
     def write_to_buffer(self, data_type, data):
         self.csv_writers[data_type].writerow(data)
@@ -150,9 +161,12 @@ class MainWindow(QMainWindow):
         self.acc_data = deque(maxlen=self.buffer_size)
         self.ecg_data = deque(maxlen=self.buffer_size)
 
-        # Set up keyboard listener
         self.keyboard_listener = keyboard.Listener(on_press=self.on_key_press)
         self.keyboard_listener.start()
+
+        self.update_timer = QTimer()
+        self.update_timer.timeout.connect(self.update_plots)
+        self.update_timer.start(50)  # Update every 50ms
 
     def on_key_press(self, key):
         if key == keyboard.KeyCode.from_char('#'):
@@ -200,18 +214,20 @@ class MainWindow(QMainWindow):
     def on_ibi_data(self, data):
         timestamp, ibi_data = data
         self.ibi_data.append((timestamp, ibi_data))
-        self.update_ibi_plot()
 
     @Slot(tuple)
     def on_acc_data(self, data):
         timestamp, acc_data = data
         self.acc_data.append((timestamp, acc_data))
-        self.update_acc_plot()
 
     @Slot(tuple)
     def on_ecg_data(self, data):
         timestamp, ecg_data = data
         self.ecg_data.append((timestamp, ecg_data))
+
+    def update_plots(self):
+        self.update_ibi_plot()
+        self.update_acc_plot()
         self.update_ecg_plot()
 
     def update_ibi_plot(self):
@@ -255,6 +271,12 @@ class MainWindow(QMainWindow):
         with open('polar_ecg_data.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'ECG'])
+
+    def closeEvent(self, event):
+        if hasattr(self, 'sensor_worker'):
+            self.sensor_worker.stop()
+            self.sensor_worker.wait()
+        event.accept()
 
 if __name__ == "__main__":
     app = QApplication([])
