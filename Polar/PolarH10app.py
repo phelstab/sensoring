@@ -50,19 +50,19 @@ class PolarSensorWorker(QThread):
                 timestamp, ibi_data = self.polar_sensor.dequeue_ibi()
                 self.ibi_data.emit((timestamp, ibi_data))
                 if self.recording_enabled:
-                    self.write_to_csv('ibi_data.csv', [timestamp, ibi_data])
+                    self.write_to_csv('polar_ibi_data.csv', [timestamp, ibi_data])
 
             while not self.polar_sensor.acc_queue_is_empty():
                 timestamp, acc_data = self.polar_sensor.dequeue_acc()
                 self.acc_data.emit((timestamp, acc_data))
                 if self.recording_enabled:
-                    self.write_to_csv('acc_data.csv', [timestamp] + list(acc_data))
+                    self.write_to_csv('polar_acc_data.csv', [timestamp] + list(acc_data))
 
             while not self.polar_sensor.ecg_queue_is_empty():
                 timestamp, ecg_data = self.polar_sensor.dequeue_ecg()
                 self.ecg_data.emit((timestamp, ecg_data))
                 if self.recording_enabled:
-                    self.write_to_csv('ecg_data.csv', [timestamp, ecg_data])
+                    self.write_to_csv('polar_ecg_data.csv', [timestamp, ecg_data])
 
             await asyncio.sleep(1)
 
