@@ -70,3 +70,6 @@ Output #0, mp4, to 'output.mp4':
 
 To Mp4:
 ffmpeg -i 2024_08_07_12_10_33.mkv -c:v libx264 -crf 23 -preset medium -c:a copy output.mp4
+
+Kinect:
+important: the device must be plugged to a USB3.0 port
