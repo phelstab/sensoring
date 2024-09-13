@@ -9,6 +9,7 @@ from collections import deque
 import csv
 import time
 from pynput import keyboard
+import io
 
 class DeviceScanner(QThread):
     devices_found = Signal(list)
@@ -32,6 +33,16 @@ class PolarSensorWorker(QThread):
         super().__init__()
         self.polar_sensor = polar_sensor
         self.recording_enabled = False
+        self.ibi_buffer = io.StringIO()
+        self.acc_buffer = io.StringIO()
+        self.ecg_buffer = io.StringIO()
+        self.csv_writers = {
+            'ibi': csv.writer(self.ibi_buffer, lineterminator='\n'),
+            'acc': csv.writer(self.acc_buffer, lineterminator='\n'),
+            'ecg': csv.writer(self.ecg_buffer, lineterminator='\n')
+        }
+        self.buffer_size = 1000
+        self.buffer_count = 0
 
     async def connect_and_start_streams(self):
         await self.polar_sensor.connect()
@@ -50,29 +61,47 @@ class PolarSensorWorker(QThread):
                 timestamp, ibi_data = self.polar_sensor.dequeue_ibi()
                 self.ibi_data.emit((timestamp, ibi_data))
                 if self.recording_enabled:
-                    self.write_to_csv('polar_ibi_data.csv', [timestamp, ibi_data])
+                    self.write_to_buffer('ibi', [timestamp, ibi_data])
 
             while not self.polar_sensor.acc_queue_is_empty():
                 timestamp, acc_data = self.polar_sensor.dequeue_acc()
                 self.acc_data.emit((timestamp, acc_data))
                 if self.recording_enabled:
-                    self.write_to_csv('polar_acc_data.csv', [timestamp] + list(acc_data))
+                    self.write_to_buffer('acc', [timestamp] + list(acc_data))
 
             while not self.polar_sensor.ecg_queue_is_empty():
                 timestamp, ecg_data = self.polar_sensor.dequeue_ecg()
                 self.ecg_data.emit((timestamp, ecg_data))
                 if self.recording_enabled:
-                    self.write_to_csv('polar_ecg_data.csv', [timestamp, ecg_data])
+                    self.write_to_buffer('ecg', [timestamp, ecg_data])
 
-            await asyncio.sleep(1)
+            if self.buffer_count >= self.buffer_size:
+                self.flush_buffers()
+
+            await asyncio.sleep(0.1)
 
     def run(self):
         asyncio.run(self.connect_and_start_streams())
 
-    def write_to_csv(self, filename, data):
-        with open(filename, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(data)
+    def write_to_buffer(self, data_type, data):
+        self.csv_writers[data_type].writerow(data)
+        self.buffer_count += 1
+
+    def flush_buffers(self):
+        with open('polar_ibi_data.csv', 'a') as f:
+            f.write(self.ibi_buffer.getvalue())
+        with open('polar_acc_data.csv', 'a') as f:
+            f.write(self.acc_buffer.getvalue())
+        with open('polar_ecg_data.csv', 'a') as f:
+            f.write(self.ecg_buffer.getvalue())
+
+        self.ibi_buffer.truncate(0)
+        self.ibi_buffer.seek(0)
+        self.acc_buffer.truncate(0)
+        self.acc_buffer.seek(0)
+        self.ecg_buffer.truncate(0)
+        self.ecg_buffer.seek(0)
+        self.buffer_count = 0
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -213,6 +242,7 @@ class MainWindow(QMainWindow):
                 print("Recording started")
             else:
                 self.record_button.setText("Record Data")
+                self.sensor_worker.flush_buffers()
                 print("Recording stopped")
 
     def initialize_csv_files(self):
