@@ -73,3 +73,7 @@ ffmpeg -i 2024_08_07_12_10_33.mkv -c:v libx264 -crf 23 -preset medium -c:a copy 
 
 Kinect:
 important: the device must be plugged to a USB3.0 port
+
+
+What is the mkv file format that is exported?
+https://learn.microsoft.com/de-de/previous-versions/azure/kinect-dk/record-file-format
