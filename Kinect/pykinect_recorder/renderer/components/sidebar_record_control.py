@@ -62,7 +62,7 @@ class ViewerSidebar(QFrame):
         option_layout.addWidget(self.rgb_camera_panel)
         option_layout.addWidget(self.depth_camera_panel)
         option_layout.addWidget(self.ir_camera_panel)
-        option_layout.addWidget(self.audio_panel)
+        # option_layout.addWidget(self.audio_panel) # deactivated because not working
 
         widget_scroll.setWidget(widget_option)
         main_layout.addWidget(widget_scroll)

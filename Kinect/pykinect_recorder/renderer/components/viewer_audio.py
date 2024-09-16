@@ -38,13 +38,14 @@ class AudioSensor(QFrame):
         self.chart.setAxisY(self.axis_y, self.series)
         self.chart.legend().hide()
 
-        self.chart_view = QChartView(self.chart)
-        self.chart_view.setContentsMargins(0, 0, 0, 0)
-        self.chart_view.setMinimumSize(QSize(min_size[0], min_size[1] - 30))
-        self.chart_view.setMaximumSize(QSize(max_size[0], (max_size[1] - 50)))
+        # deactivated because of latency issues
+        # self.chart_view = QChartView(self.chart)
+        # self.chart_view.setContentsMargins(0, 0, 0, 0)
+        # self.chart_view.setMinimumSize(QSize(min_size[0], min_size[1] - 30))
+        # self.chart_view.setMaximumSize(QSize(max_size[0], (max_size[1] - 50)))
 
         self.main_layout.addWidget(self.label_title)
-        self.main_layout.addWidget(self.chart_view)
+        # self.main_layout.addWidget(self.chart_view)
 
         self.label_device_name = Label("Device: ", orientation=Qt.AlignLeft)
         self.label_device_name.setMinimumHeight(20)

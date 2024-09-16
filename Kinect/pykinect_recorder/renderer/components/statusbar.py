@@ -26,8 +26,8 @@ class StatusBar(QFrame):
             self.base_path = os.path.join(str(Path.home()), "Videos")
 
         self.sub_data_layout = QHBoxLayout()
-        self.label_save_path = Label(f"Save dir: {self.base_path}", fontsize=12)
-        self.sub_data_layout.addWidget(self.label_save_path)
+        # self.label_save_path = Label(f"Save dir: {self.base_path}", fontsize=12)
+        # self.sub_data_layout.addWidget(self.label_save_path)
         self.sub_data_layout.setAlignment(Qt.AlignLeft)
         self.main_layout.addLayout(self.sub_data_layout)
 

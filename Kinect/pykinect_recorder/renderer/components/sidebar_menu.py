@@ -26,17 +26,17 @@ class SidebarMenus(QFrame):
             qta.icon("fa.video-camera", color="#d7d7d7"), 
             "Recording Viewer"
         )
-        self.btn_explorer_menu = self.make_icons(
-            qta.icon("ph.monitor-play-fill", color="#777777"), 
-            "Explorer & Playback"
-        )
+        # self.btn_explorer_menu = self.make_icons(
+        #     qta.icon("ph.monitor-play-fill", color="#777777"), 
+        #     "Explorer & Playback"
+        # )
         # self.btn_deeplearning_menu = self.make_icons(
         #     qta.icon("fa.crosshairs", color="#777777"), 
         #     "Deep Learning Solution"
         # )
 
         menu_layout.addWidget(self.btn_recorder_menu)
-        menu_layout.addWidget(self.btn_explorer_menu)
+        # menu_layout.addWidget(self.btn_explorer_menu)
         # menu_layout.addWidget(self.btn_deeplearning_menu)
         main_layout.addLayout(menu_layout)
 
@@ -47,7 +47,7 @@ class SidebarMenus(QFrame):
         self.setLayout(main_layout)
 
         self.btn_recorder_menu.clicked.connect(self.clicked_recorder)
-        self.btn_explorer_menu.clicked.connect(self.clicked_explorer)
+        # self.btn_explorer_menu.clicked.connect(self.clicked_explorer)
         # self.btn_deeplearning_menu.clicked.connect(self.clicked_solution)
 
     def make_icons(self, icon: qta, tooltip: str, scale: float = 0.8) -> QPushButton:
@@ -73,18 +73,18 @@ class SidebarMenus(QFrame):
 
     def clicked_recorder(self):
         self.btn_recorder_menu.setIcon(qta.icon("fa.video-camera", color="#d7d7d7"))
-        self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#777777"))
+        # self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#777777"))
         # self.btn_deeplearning_menu.setIcon(qta.icon("fa.crosshairs", color="#777777"))
         all_signals.option_signals.stacked_sidebar_status.emit("recorder")
 
     def clicked_explorer(self):
         self.btn_recorder_menu.setIcon(qta.icon("fa.video-camera", color="#777777"))
-        self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#d7d7d7"))
+        # self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#d7d7d7"))
         # self.btn_deeplearning_menu.setIcon(qta.icon("fa.crosshairs", color="#777777"))
         all_signals.option_signals.stacked_sidebar_status.emit("explorer")
 
     def clicked_solution(self):
         self.btn_recorder_menu.setIcon(qta.icon("fa.video-camera", color="#777777"))
-        self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#777777"))
+        # self.btn_explorer_menu.setIcon(qta.icon("ph.monitor-play-fill", color="#777777"))
         # self.btn_deeplearning_menu.setIcon(qta.icon("fa.crosshairs", color="#d7d7d7"))
         all_signals.option_signals.stacked_sidebar_status.emit("solution")
