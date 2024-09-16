@@ -196,6 +196,7 @@ class SensorViewer(QFrame):
         # self.filename_audio = os.path.join(self.base_path, f"{filename}.wav")
 
         recording_folder = self.create_recording_folder()
+        print(f"Recording folder: {recording_folder}")
 
         self.filename_video = os.path.join(recording_folder, "kinect_video_recording.mkv")
         self.filename_audio = os.path.join(recording_folder, "kinect_audio_recording.wav")
