@@ -153,15 +153,53 @@ class SensorViewer(QFrame):
                 wait_dialog = CustomProgressBarDialog(msec=500)
                 wait_dialog.show()
 
+    def create_recording_folder(self):
+        import os
+        from datetime import datetime
+        base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        date_str = datetime.now().strftime("%d_%m_%Y")
+        session_number = 1
+        
+        existing_folders = [f for f in os.listdir(base_folder) if f.startswith(date_str)]
+        if existing_folders:
+            session_numbers = [int(f.split('_')[-1]) for f in existing_folders]
+            highest_session = max(session_numbers)
+            folder_name = f"{date_str}_session_{highest_session}"
+            full_path = os.path.join(base_folder, folder_name)
+            
+            files_to_check = ['kinect_video_recording.mkv', 'kinect_audio_recording.wav']
+            existing_files = [f for f in files_to_check if os.path.exists(os.path.join(full_path, f))]
+            
+            if len(existing_files) == 3:
+                session_number = highest_session + 1
+            elif len(existing_files) > 0:
+                session_number = highest_session + 1
+            else:
+                return full_path
+        
+        while True:
+            folder_name = f"{date_str}_session_{session_number}"
+            full_path = os.path.join(base_folder, folder_name)
+            if not os.path.exists(full_path):
+                os.makedirs(full_path)
+                return full_path
+            session_number += 1
+
     def set_filename(self) -> None:
-        if self.base_path is None:
-            self.base_path = os.path.join(Path.home(), "Videos")
+        # if self.base_path is None:
+        #     self.base_path = os.path.join(Path.home(), "Videos")
 
-        filename = datetime.datetime.now()
-        filename = filename.strftime("%Y_%m_%d_%H_%M_%S")
+        # filename = datetime.datetime.now()
+        # filename = filename.strftime("%Y_%m_%d_%H_%M_%S")
 
-        self.filename_video = os.path.join(self.base_path, f"{filename}.mkv")
-        self.filename_audio = os.path.join(self.base_path, f"{filename}.wav")
+        # self.filename_video = os.path.join(self.base_path, f"{filename}.mkv")
+        # self.filename_audio = os.path.join(self.base_path, f"{filename}.wav")
+
+        recording_folder = self.create_recording_folder()
+
+        self.filename_video = os.path.join(recording_folder, "kinect_video_recording.mkv")
+        self.filename_audio = os.path.join(recording_folder, "kinect_audio_recording.wav")
+
         if sys.flags.debug:
             print(self.base_path, self.filename_video, self.filename_audio)
 
