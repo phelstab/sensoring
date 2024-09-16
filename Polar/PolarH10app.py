@@ -10,6 +10,8 @@ import csv
 import time
 from pynput import keyboard
 import io
+import os
+from datetime import datetime
 
 class DeviceScanner(QThread):
     devices_found = Signal(list)
@@ -44,6 +46,7 @@ class PolarSensorWorker(QThread):
         self.buffer_size = 1000
         self.buffer_count = 0
         self.running = True
+        self.recording_folder = ""
 
     async def connect_and_start_streams(self):
         try:
@@ -99,11 +102,11 @@ class PolarSensorWorker(QThread):
         self.buffer_count += 1
 
     def flush_buffers(self):
-        with open('polar_ibi_data.csv', 'a') as f:
+        with open(os.path.join(self.recording_folder, 'polar_ibi_data.csv'), 'a') as f:
             f.write(self.ibi_buffer.getvalue())
-        with open('polar_acc_data.csv', 'a') as f:
+        with open(os.path.join(self.recording_folder, 'polar_acc_data.csv'), 'a') as f:
             f.write(self.acc_buffer.getvalue())
-        with open('polar_ecg_data.csv', 'a') as f:
+        with open(os.path.join(self.recording_folder, 'polar_ecg_data.csv'), 'a') as f:
             f.write(self.ecg_buffer.getvalue())
 
         self.ibi_buffer.truncate(0)
@@ -254,6 +257,7 @@ class MainWindow(QMainWindow):
             self.sensor_worker.recording_enabled = not self.sensor_worker.recording_enabled
             if self.sensor_worker.recording_enabled:
                 self.record_button.setText("Stop Recording")
+                self.sensor_worker.recording_folder = self.create_recording_folder()
                 self.initialize_csv_files()
                 print("Recording started")
             else:
@@ -261,14 +265,27 @@ class MainWindow(QMainWindow):
                 self.sensor_worker.flush_buffers()
                 print("Recording stopped")
 
+    def create_recording_folder(self):
+        base_folder = os.path.dirname(os.path.abspath(__file__))
+        date_str = datetime.now().strftime("%d_%m_%Y")
+        session_number = 1
+        
+        while True:
+            folder_name = f"{date_str}_session_{session_number}"
+            full_path = os.path.join(base_folder, folder_name)
+            if not os.path.exists(full_path):
+                os.makedirs(full_path)
+                return full_path
+            session_number += 1
+
     def initialize_csv_files(self):
-        with open('polar_ibi_data.csv', 'w', newline='') as file:
+        with open(os.path.join(self.sensor_worker.recording_folder, 'polar_ibi_data.csv'), 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'IBI'])
-        with open('polar_acc_data.csv', 'w', newline='') as file:
+        with open(os.path.join(self.sensor_worker.recording_folder, 'polar_acc_data.csv'), 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
-        with open('polar_ecg_data.csv', 'w', newline='') as file:
+        with open(os.path.join(self.sensor_worker.recording_folder, 'polar_ecg_data.csv'), 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Timestamp', 'ECG'])
 
