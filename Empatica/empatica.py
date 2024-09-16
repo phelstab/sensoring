@@ -9,6 +9,7 @@ from pynput import keyboard
 from collections import deque
 import os
 from datetime import datetime
+import sys
 
 # E4 Streaming Server configuration
 SERVER_ADDRESS = '127.0.0.1'
@@ -139,7 +140,7 @@ class MainWindow(QWidget):
         self.keyboard_listener.start()
 
     def create_recording_folder(self):
-        base_folder = os.path.dirname(os.path.abspath(__file__))
+        base_folder = os.path.dirname(sys.executable)
         date_str = datetime.now().strftime("%d_%m_%Y")
         session_number = 1
         

@@ -4,6 +4,8 @@ import time
 import ctypes
 import datetime
 from pathlib import Path
+from datetime import datetime
+import sys
 
 from PySide6.QtCore import Qt, Slot, QEvent, QMimeData, QPointF, QSize
 from PySide6.QtGui import QImage, QPixmap, QDrag
@@ -154,9 +156,7 @@ class SensorViewer(QFrame):
                 wait_dialog.show()
 
     def create_recording_folder(self):
-        import os
-        from datetime import datetime
-        base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        base_folder = os.path.dirname(sys.executable)
         date_str = datetime.now().strftime("%d_%m_%Y")
         session_number = 1
         

@@ -12,7 +12,7 @@ from pynput import keyboard
 import io
 import os
 from datetime import datetime
-
+import sys
 class DeviceScanner(QThread):
     devices_found = Signal(list)
 
@@ -266,7 +266,7 @@ class MainWindow(QMainWindow):
                 print("Recording stopped")
 
     def create_recording_folder(self):
-        base_folder = os.path.dirname(os.path.abspath(__file__))
+        base_folder = os.path.dirname(sys.executable)
         date_str = datetime.now().strftime("%d_%m_%Y")
         session_number = 1
         
