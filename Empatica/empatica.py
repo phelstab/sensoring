@@ -7,6 +7,8 @@ from PySide6.QtCore import QThread, Signal, Qt
 import pyqtgraph as pg
 from pynput import keyboard
 from collections import deque
+import os
+from datetime import datetime
 
 # E4 Streaming Server configuration
 SERVER_ADDRESS = '127.0.0.1'
@@ -136,6 +138,43 @@ class MainWindow(QWidget):
         self.keyboard_listener = keyboard.Listener(on_press=self.on_key_press)
         self.keyboard_listener.start()
 
+    def create_recording_folder(self):
+        base_folder = os.path.dirname(os.path.abspath(__file__))
+        date_str = datetime.now().strftime("%d_%m_%Y")
+        session_number = 1
+        
+        existing_folders = [f for f in os.listdir(base_folder) if f.startswith(date_str)]
+        if existing_folders:
+            session_numbers = [int(f.split('_')[-1]) for f in existing_folders]
+            highest_session = max(session_numbers)
+            folder_name = f"{date_str}_session_{highest_session}"
+            full_path = os.path.join(base_folder, folder_name)
+            
+            files_to_check = ['empatica_acc_data.csv', 
+                            'empatica_bvp_data.csv',
+                            'empatica_gsr_data.csv',
+                            'empatica_temp_data.csv',
+                            'empatica_ibi_data.csv',
+                            'empatica_hr_data.csv',
+                            'empatica_non_data_log.csv']
+            
+            existing_files = [f for f in files_to_check if os.path.exists(os.path.join(full_path, f))]
+            
+            if len(existing_files) == 3:
+                session_number = highest_session + 1
+            elif len(existing_files) > 0:
+                session_number = highest_session + 1
+            else:
+                return full_path
+        
+        while True:
+            folder_name = f"{date_str}_session_{session_number}"
+            full_path = os.path.join(base_folder, folder_name)
+            if not os.path.exists(full_path):
+                os.makedirs(full_path)
+                return full_path
+            session_number += 1
+
     def on_key_press(self, key):
         if key == keyboard.KeyCode.from_char('#'):
             self.toggle_logging()
@@ -227,13 +266,15 @@ class MainWindow(QWidget):
 
     def toggle_logging(self):
         if not self.logging_enabled:
-            self.acc_file = open('empatica_acc_data.csv', 'w', newline='')
-            self.bvp_file = open('empatica_bvp_data.csv', 'w', newline='')
-            self.gsr_file = open('empatica_gsr_data.csv', 'w', newline='')
-            self.tmp_file = open('empatica_temp_data.csv', 'w', newline='')
-            self.ibi_file = open('empatica_ibi_data.csv', 'w', newline='')
-            self.hr_file = open('empatica_hr_data.csv', 'w', newline='')
-            self.non_data_file = open('empatica_non_data_log.csv', 'w', newline='')
+            recording_folder = self.create_recording_folder()
+            self.acc_file = open(os.path.join(recording_folder, 'empatica_acc_data.csv'), 'w', newline='')
+            self.bvp_file = open(os.path.join(recording_folder, 'empatica_bvp_data.csv'), 'w', newline='')
+            self.gsr_file = open(os.path.join(recording_folder, 'empatica_gsr_data.csv'), 'w', newline='')
+            self.tmp_file = open(os.path.join(recording_folder, 'empatica_temp_data.csv'), 'w', newline='')
+            self.ibi_file = open(os.path.join(recording_folder, 'empatica_ibi_data.csv'), 'w', newline='')
+            self.hr_file = open(os.path.join(recording_folder, 'empatica_hr_data.csv'), 'w', newline='')
+            self.non_data_file = open(os.path.join(recording_folder, 'empatica_non_data_log.csv'), 'w', newline='')
+
             self.acc_writer = csv.writer(self.acc_file)
             self.bvp_writer = csv.writer(self.bvp_file)
             self.gsr_writer = csv.writer(self.gsr_file)
