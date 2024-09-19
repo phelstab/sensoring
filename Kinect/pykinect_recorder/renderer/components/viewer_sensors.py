@@ -47,7 +47,8 @@ class SensorViewer(QFrame):
         self.main_layout.setAlignment(Qt.AlignCenter)
         self.frame_rgb = Frame("RGB Sensor", min_size=(460, 330), max_size=(595, 510))
         self.frame_depth = Frame("Depth Sensor", min_size=(460, 330), max_size=(595, 510))
-        self.frame_ir = Frame("IR Sensor", min_size=(460, 330), max_size=(595, 510))
+        self.frame_ir = Frame("IR Sensor", min_size=(460, 330), max_size=(595, 510))      
+        self.frame_body = Frame("Body Tracking", min_size=(460, 330), max_size=(595, 510))
 
         self.sensor_data_layout = QHBoxLayout()
         self.sensor_data_layout.setSpacing(0)
@@ -75,6 +76,8 @@ class SensorViewer(QFrame):
         self.main_layout.addWidget(self.frame_depth, 0, 1)
         self.main_layout.addWidget(self.frame_rgb, 1, 0)
         self.main_layout.addWidget(self.frame_subdata, 1, 1)
+
+        self.main_layout.addWidget(self.frame_body, 2, 0)
 
         self.setAcceptDrops(True)
         self.setLayout(self.main_layout)
