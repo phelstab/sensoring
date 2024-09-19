@@ -77,3 +77,45 @@ important: the device must be plugged to a USB3.0 port
 
 What is the mkv file format that is exported?
 https://learn.microsoft.com/de-de/previous-versions/azure/kinect-dk/record-file-format
+
+
+
+Body Tracking Problems:
+
+Initializing body tracking library from C:\Program Files\Azure Kinect Body Tracking SDK\sdk\windows-desktop\amd64\release\bin\k4abt.dll
+Loading body tracker library from C:\Program Files\Azure Kinect Body Tracking SDK\sdk\windows-desktop\amd64\release\bin\k4abt.dll
+Body tracker library loaded successfully
+Initializing body tracking library from C:\Program Files\Azure Kinect Body Tracking SDK\sdk\windows-desktop\amd64\release\bin\k4abt.dll
+Loading body tracker library from C:\Program Files\Azure Kinect Body Tracking SDK\sdk\windows-desktop\amd64\release\bin\k4abt.dll
+Body tracker library loaded successfully
+Traceback (most recent call last):
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\renderer\components\viewer_sensors.py", line 109, in select_option
+    self.streaming()
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\renderer\components\viewer_sensors.py", line 115, in streaming
+    self.play()
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\renderer\components\viewer_sensors.py", line 139, in play
+    self.viewer = RecordSensors(device=self.device, video_file_path=self.filename_video, audio_file_path=self.filename_audio)
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\renderer\components\record_sensors.py", line 28, in __init__
+    self.body_tracker = start_body_tracker(calibration=device.calibration)
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\pykinect.py", line 78, in start_body_tracker
+    return Tracker(calibration, model_type)
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\k4abt\tracker.py", line 12, in __init__
+    self._handle = self.create(model_type)
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\k4abt\tracker.py", line 75, in create
+    _k4abt.k4abt_tracker_create(self.calibration.handle(), tracker_config, tracker_handle),
+  File "C:\Users\lambda\Workspace\sensoring\venv\lib\site-packages\pykinect_azure\k4abt\_k4abt.py", line 54, in k4abt_tracker_create
+    _k4abt_tracker_create = k4abt_dll.k4abt_tracker_create
+AttributeError: 'NoneType' object has no attribute 'k4abt_tracker_create'
+[2024-09-20 00:14:29.957] [critical] [t=10676] D:\a\1\s\extern\Azure-Kinect-Sensor-SDK\src\usbcommand\usbcommand.c (366): find_libusb_device(). libusb device(s) are all unavalable. Is the device being used by another application?
+[2024-09-20 00:14:29.957] [error] [t=10676] D:\a\1\s\extern\Azure-Kinect-Sensor-SDK\src\depth_mcu\depth_mcu.c (68): usb_cmd_create(USB_DEVICE_DEPTH_PROCESSOR, device_index, NULL, &depthmcu->usb_cmd) returned failure in depthmcu_create()
+[2024-09-20 00:14:29.957] [error] [t=10676] D:\a\1\s\extern\Azure-Kinect-Sensor-SDK\src\sdk\k4a.c (133): depthmcu_create(index, &device->depthmcu) returned failure in k4a_device_open()
+Open K4A Device failed!
+Exception ignored in: <function Tracker.__del__ at 0x000002C4CD354700>
+Traceback (most recent call last):
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\k4abt\tracker.py", line 16, in __del__
+    self.destroy()
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\k4abt\tracker.py", line 28, in destroy
+    if self.is_valid():
+  File "C:\Users\lambda\Workspace\sensoring\Kinect\pykinect_recorder\pyk4a\k4abt\tracker.py", line 19, in is_valid
+    return self._handle
+AttributeError: 'Tracker' object has no attribute '_handle'
