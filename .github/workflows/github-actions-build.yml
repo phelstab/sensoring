@@ -22,11 +22,18 @@ jobs:
       run: |
         cd Empatica 
         pyinstaller --clean --onefile Empatica.py
-    - name: Upload artifact
+        cd ../Polar
+        pyinstaller --clean --onefile --add-data "PolarH10.py;." PolarH10app.py
+        cd ../Kinect
+        pyinstaller --clean --onefile --add-data "pykinect_recorder;pykinect_recorder" --name Kinect main.py
+    - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: app
-        path: Empatica\dist\Empatica.exe
+        name: apps
+        path: |
+          Empatica\dist\Empatica.exe
+          Polar\dist\PolarH10app.exe
+          Kinect\dist\main.exe
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -37,7 +44,7 @@ jobs:
         release_name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false
-    - name: Upload Release Asset
+    - name: Upload Release Assets
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,4 +52,22 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Empatica/dist/Empatica.exe
         asset_name: Empatica.exe
+        asset_content_type: application/octet-stream
+    - name: Upload Polar Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./Polar/dist/PolarH10app.exe
+        asset_name: PolarH10app.exe
+        asset_content_type: application/octet-stream
+    - name: Upload Kinect Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./Kinect/dist/Kinect.exe
+        asset_name: Kinect.exe
         asset_content_type: application/octet-stream
