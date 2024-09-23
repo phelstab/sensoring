@@ -14,17 +14,33 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
+    - name: Generate version number
+      id: version
+      run: |
+        $latest_release = (Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest").tag_name
+        if ($latest_release -match '^\d+\.\d+\.\d+$') {
+          $version_parts = $latest_release.Split('.')
+          $new_version = "$($version_parts[0]).$($version_parts[1]).$([int]$version_parts[2] + 1)"
+        } else {
+          $new_version = "1.0.0"
+        }
+        echo "::set-output name=new_version::$new_version"
+      shell: pwsh
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Build with PyInstaller
+    - name: Build Empatica with PyInstaller
       run: |
         cd Empatica 
         pyinstaller --clean --onefile Empatica.py
-        cd ../Polar
+    - name: Build Polar with PyInstaller
+      run: |
+        cd Polar
         pyinstaller --clean --onefile --add-data "PolarH10.py;." PolarH10app.py
-        cd ../Kinect
+    - name: Build Kinect with PyInstaller
+      run: |
+        cd Kinect
         pyinstaller --clean --onefile --add-data "pykinect_recorder;pykinect_recorder" --name Kinect main.py
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
@@ -33,17 +49,18 @@ jobs:
         path: |
           Empatica\dist\Empatica.exe
           Polar\dist\PolarH10app.exe
-          Kinect\dist\main.exe
+          Kinect\dist\Kinect.exe
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        tag_name: v${{ steps.version.outputs.new_version }}
+        release_name: Release v${{ steps.version.outputs.new_version }}
         draft: false
         prerelease: false
+
     - name: Upload Release Assets
       uses: actions/upload-release-asset@v1
       env:
@@ -51,8 +68,9 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Empatica/dist/Empatica.exe
-        asset_name: Empatica.exe
+        asset_name: Empatica-v${{ steps.version.outputs.new_version }}.exe
         asset_content_type: application/octet-stream
+
     - name: Upload Polar Release Asset
       uses: actions/upload-release-asset@v1
       env:
@@ -60,8 +78,9 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Polar/dist/PolarH10app.exe
-        asset_name: PolarH10app.exe
+        asset_name: PolarH10app-v${{ steps.version.outputs.new_version }}.exe
         asset_content_type: application/octet-stream
+
     - name: Upload Kinect Release Asset
       uses: actions/upload-release-asset@v1
       env:
@@ -69,5 +88,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Kinect/dist/Kinect.exe
-        asset_name: Kinect.exe
+        asset_name: Kinect-v${{ steps.version.outputs.new_version }}.exe
         asset_content_type: application/octet-stream
