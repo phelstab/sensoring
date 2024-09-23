@@ -17,18 +17,22 @@ jobs:
     - name: Generate version number
       id: version
       env:
-        TOKEN_SECRET_NAME: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        $latest_release = (Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest").tag_name
-        if ($latest_release -match '^\d+\.\d+\.\d+$') {
-          $version_parts = $latest_release.Split('.')
-          $new_version = "$($version_parts[0]).$($version_parts[1]).$([int]$version_parts[2] + 1)"
-        } else {
+        try {
+          $latest_release = (Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" -Headers @{Authorization = "token $env:GITHUB_TOKEN"}).tag_name
+          if ($latest_release -match '^\d+\.\d+\.\d+') {
+            $version_parts = $latest_release.Split('.')
+            $new_version = "$($version_parts[0]).$($version_parts[1]).$([int]$version_parts[2] + 1)"
+          } else {
+            $new_version = "1.0.0"
+          }
+        } catch {
           $new_version = "1.0.0"
         }
-        echo "::set-output name=new_version::$new_version"
+        echo "new_version=$new_version" >> $env:GITHUB_OUTPUT
       shell: pwsh
-
+  
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
