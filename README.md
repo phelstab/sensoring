@@ -77,3 +77,9 @@ important: the device must be plugged to a USB3.0 port
 
 What is the mkv file format that is exported?
 https://learn.microsoft.com/de-de/previous-versions/azure/kinect-dk/record-file-format
+
+
+Github Pipeline Rates:
+https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions
+
+Windows server rate is 1500 minutes
