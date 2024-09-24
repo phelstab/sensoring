@@ -3,20 +3,36 @@
 
 format: jb-book
 root: index
-chapters:
-  - file: documentation/markdown
-  - file: documentation/notebooks
-  - file: documentation/bibliography
+parts:
+  - caption: Introduction
+    numbered: true
+    maxdepth: 2
+    chapters:
+      - file: documentation/introduction
+      - file: documentation/motivation
+  - caption: Installation & User Guide
+    numbered: true
+    maxdepth: 2
+    chapters:
+      - file: documentation/doc_polar
+      - file: documentation/doc_empatica
+      - file: documentation/doc_kinect
+  - caption: Sensoring Documentation
+    numbered: true
+    maxdepth: 2
+    chapters:
+      - file: documentation/dev_polar
+      - file: documentation/dev_empatica
+      - file: documentation/dev_kinect
+  - caption: Appendices
+    chapters:
+      - file: documentation/bibliography
+
+
+
+# chapters:
+#   - file: documentation/markdown
+#   - file: documentation/notebooks
+#   - file: documentation/bibliography
 
 # Or you organize the TOC by parts
-
-# parts:
-#   - caption: Chapters
-#     numbered: true
-#     maxdepth: 2
-#     chapters:
-#       - file: book/markdown
-#       - file: book/notebooks
-#   - caption: Appendices
-#     chapters:
-#       - file: book/bibliography

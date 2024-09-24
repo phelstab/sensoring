@@ -52,11 +52,3 @@ opencv-python
 open3d
 pynput
 pyqtgraph
-jupyter-book
-matplotlib
-numpy
-ghp-import
-jupyter-book
-matplotlib
-numpy
-ghp-import

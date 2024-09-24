@@ -142,39 +142,23 @@ class MainWindow(QWidget):
     def create_recording_folder(self):
         base_folder = os.path.dirname(sys.executable)
         date_str = datetime.now().strftime("%d_%m_%Y")
+
+        # Find the highest session number
         session_number = 1
-        
-        existing_folders = [f for f in os.listdir(base_folder) if f.startswith(date_str)]
-        if existing_folders:
-            session_numbers = [int(f.split('_')[-1]) for f in existing_folders]
-            highest_session = max(session_numbers)
-            folder_name = f"{date_str}_session_{highest_session}"
-            full_path = os.path.join(base_folder, folder_name)
-            
-            files_to_check = ['empatica_acc_data.csv', 
-                            'empatica_bvp_data.csv',
-                            'empatica_gsr_data.csv',
-                            'empatica_temp_data.csv',
-                            'empatica_ibi_data.csv',
-                            'empatica_hr_data.csv',
-                            'empatica_non_data_log.csv']
-            
-            existing_files = [f for f in files_to_check if os.path.exists(os.path.join(full_path, f))]
-            
-            if len(existing_files) == 3:
-                session_number = highest_session + 1
-            elif len(existing_files) > 0:
-                session_number = highest_session + 1
-            else:
-                return full_path
-        
         while True:
-            folder_name = f"{date_str}_session_{session_number}"
-            full_path = os.path.join(base_folder, folder_name)
-            if not os.path.exists(full_path):
-                os.makedirs(full_path)
-                return full_path
+            session_folder = f"{date_str}_session{session_number}"
+            full_path = os.path.join(base_folder, session_folder)
+            empatica_path = os.path.join(full_path, "Empatica")
+            
+            if not os.path.exists(empatica_path):
+                break
             session_number += 1
+
+        # Create the new session folder and Empatica subfolder
+        os.makedirs(empatica_path)
+        print(empatica_path)
+        return empatica_path
+
 
     def on_key_press(self, key):
         if key == keyboard.KeyCode.from_char('#'):
