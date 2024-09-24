@@ -53,12 +53,10 @@ open3d
 pynput
 pyqtgraph
 jupyter-book
-jupynext
 matplotlib
 numpy
 ghp-import
 jupyter-book
-jupynext
 matplotlib
 numpy
 ghp-import
