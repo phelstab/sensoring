@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to your Jupyter Book &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
+    <title>Real-Time Multi-Modal Audio, Video and Physiological Data Collection &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
   
   
   
@@ -57,14 +57,12 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="canonical" href="https://phelstab.github.io/sensoring/index.html" />
     <link rel="icon" href="_static/fav.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Markdown Files" href="documentation/markdown.html" />
+    <link rel="next" title="1. Introduction" href="documentation/introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,9 +174,25 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="documentation/markdown.html">Markdown Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation/notebooks.html">Content with notebooks</a></li>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="documentation/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/motivation.html">2. Motivation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation &amp; User Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="documentation/doc_polar.html">3. Setup Polar H10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/doc_empatica.html">4. Setup Empatica E4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/doc_kinect.html">5. Setup Azure Kinect DK</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Sensoring Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="documentation/dev_polar.html">6. Polar H10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/dev_empatica.html">7. Empatica E4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/dev_kinect.html">8. Azure Kinect DK</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="documentation/bibliography.html">Bibliography</a></li>
 </ul>
 
@@ -226,6 +240,55 @@
 
 
 
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/phelstab/sensoring/master?urlpath=tree/index.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/phelstab/sensoring/blob/master/index.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
 <div class="dropdown dropdown-source-buttons">
   <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
     <i class="fab fa-github"></i>
@@ -251,7 +314,7 @@
       
       
       
-      <li><a href="https://github.com/phelstab/sensoring/edit/main/index.md" target="_blank"
+      <li><a href="https://github.com/phelstab/sensoring/edit/main/index.ipynb" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -298,7 +361,7 @@
       
       
       
-      <li><a href="_sources/index.md" target="_blank"
+      <li><a href="_sources/index.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -308,7 +371,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -369,7 +432,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -380,11 +445,20 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Welcome to your Jupyter Book</h1>
+    <h1>Real-Time Multi-Modal Audio, Video and Physiological Data Collection</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure">Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites-requirements">Prerequisites &amp; Requirements</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -394,19 +468,23 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-your-jupyter-book">
-<h1>Welcome to your Jupyter Book<a class="headerlink" href="#welcome-to-your-jupyter-book" title="Link to this heading">#</a></h1>
-<p>This is a small sample book to give you a feel for how book content is
-structured.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Here is a note!</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="real-time-multi-modal-audio-video-and-physiological-data-collection">
+<h1>Real-Time Multi-Modal Audio, Video and Physiological Data Collection<a class="headerlink" href="#real-time-multi-modal-audio-video-and-physiological-data-collection" title="Link to this heading">#</a></h1>
+<p><em>by Paul Helstab &amp; Danila Mamontov</em></p>
+<p>This book is a collection…</p>
+<section id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Link to this heading">#</a></h2>
+</section>
+<section id="prerequisites-requirements">
+<h2>Prerequisites &amp; Requirements<a class="headerlink" href="#prerequisites-requirements" title="Link to this heading">#</a></h2>
+<p>The project will give a broad overview of the blockchain technology and will highlight certain parts more detailed.</p>
+</section>
+<div class="toctree-wrapper compound">
 </div>
-<p>And here is a code block:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">mc</span><span class="o">^</span><span class="mi">2</span>
-</pre></div>
+<div class="toctree-wrapper compound">
 </div>
-<p>Check out the content pages bundled with this sample book to see more.</p>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -442,11 +520,11 @@ structured.</p>
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="documentation/markdown.html"
+       href="documentation/introduction.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Markdown Files</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Introduction</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -456,6 +534,22 @@ structured.</p>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure">Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites-requirements">Prerequisites &amp; Requirements</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
