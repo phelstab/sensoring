@@ -1,9 +1,8 @@
 name: PyInstaller Build and Release
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -14,25 +13,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-    - name: Generate version number
-      id: version
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        try {
-          $latest_release = (Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" -Headers @{Authorization = "token $env:GITHUB_TOKEN"}).tag_name
-          if ($latest_release -match '^\d+\.\d+\.\d+') {
-            $version_parts = $latest_release.Split('.')
-            $new_version = "$($version_parts[0]).$($version_parts[1]).$([int]$version_parts[2] + 1)"
-          } else {
-            $new_version = "1.0.0"
-          }
-        } catch {
-          $new_version = "1.0.0"
-        }
-        echo "new_version=$new_version" >> $env:GITHUB_OUTPUT
-      shell: pwsh
-  
+    - name: Get the version
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -63,8 +46,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ steps.version.outputs.new_version }}
-        release_name: Release v${{ steps.version.outputs.new_version }}
+        tag_name: ${{ steps.get_version.outputs.VERSION }}
+        release_name: Release ${{ steps.get_version.outputs.VERSION }}
         draft: false
         prerelease: false
 
@@ -75,7 +58,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Empatica/dist/Empatica.exe
-        asset_name: Empatica-v${{ steps.version.outputs.new_version }}.exe
+        asset_name: Empatica-${{ steps.get_version.outputs.VERSION }}.exe
         asset_content_type: application/octet-stream
 
     - name: Upload Polar Release Asset
@@ -85,7 +68,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Polar/dist/PolarH10app.exe
-        asset_name: PolarH10app-v${{ steps.version.outputs.new_version }}.exe
+        asset_name: PolarH10app-${{ steps.get_version.outputs.VERSION }}.exe
         asset_content_type: application/octet-stream
 
     - name: Upload Kinect Release Asset
@@ -95,5 +78,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Kinect/dist/Kinect.exe
-        asset_name: Kinect-v${{ steps.version.outputs.new_version }}.exe
+        asset_name: Kinect-${{ steps.get_version.outputs.VERSION }}.exe
         asset_content_type: application/octet-stream
