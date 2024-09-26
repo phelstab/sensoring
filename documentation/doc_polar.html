@@ -462,6 +462,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">3.3. Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">3.4. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executable-pyinstaller-bundling">3.5. Executable (pyinstaller bundling)</a></li>
 </ul>
             </nav>
         </div>
@@ -505,6 +506,27 @@ document.write(`
 <li><p>Start the application, after ~2-5 seconds all data become visible after ~2-10 seconds as timeseries plots.</p></li>
 <li><p>When all timeseries plots are available the recording can be started by pressing “#” or via button.</p></li>
 </ol>
+</section>
+<section id="executable-pyinstaller-bundling">
+<h2><span class="section-number">3.5. </span>Executable (pyinstaller bundling)<a class="headerlink" href="#executable-pyinstaller-bundling" title="Link to this heading">#</a></h2>
+<p>To bunde the application to a <strong>portable .exe on windows</strong> with following steps:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>created
+<span class="go">python -m venv venv</span>
+
+<span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>activated
+<span class="go">.\venv\Scripts\activate </span>
+
+<span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>installed
+<span class="go">pip install -r requirements.txt</span>
+
+<span class="go">cd Polar</span>
+<span class="go">pyinstaller --clean --onefile --add-data &quot;PolarH10.py;.&quot; PolarH10app.py</span>
+</pre></div>
+</div>
+<p>The bundled .exe can be found in the <strong>dist</strong> folder after finish.</p>
+<ul class="simple">
+<li><p><strong>The documentation of the pyinstaller what the arguments are used for can be found here: <a class="reference external" href="https://pyinstaller.org/en/stable/usage.html">Pyinstaller Docs</a></strong></p></li>
+</ul>
 </section>
 </section>
 
@@ -579,6 +601,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">3.3. Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">3.4. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executable-pyinstaller-bundling">3.5. Executable (pyinstaller bundling)</a></li>
 </ul>
   </nav></div>
 

@@ -455,8 +455,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.1. Application runtime</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.2. Important notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">8.1. Sensors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">8.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.3. Application runtime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.4. Important notes</a></li>
 </ul>
             </nav>
         </div>
@@ -470,23 +472,15 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="empatica-e4">
 <h1><span class="section-number">8. </span>Empatica E4<a class="headerlink" href="#empatica-e4" title="Link to this heading">#</a></h1>
-<p><strong>Provided Sensors:</strong>
-<strong>Empatica E4</strong> (Real-time physiological signals)</p>
+<section id="sensors">
+<h2><span class="section-number">8.1. </span>Sensors<a class="headerlink" href="#sensors" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Photoplethysmography sensor (PPG)</p></li>
 <li><p>Electrodermal activity sensor (EDA)</p></li>
 <li><p>3-axis accelerometer (XYZ)</p></li>
 <li><p>Optical thermometer (Infrared)</p></li>
 </ul>
-<section id="application-runtime">
-<h2><span class="section-number">8.1. </span>Application runtime<a class="headerlink" href="#application-runtime" title="Link to this heading">#</a></h2>
-<p>The Empatica E4 streaming server is a Middleware which communicates to any third party software via TCP. The default server adress and port is: <strong>localhost (127.0.0.1) and 28000</strong>.</p>
-<ol class="arabic simple">
-<li><p><strong>On Start:</strong> application subscribes to all available Empatica E4 data streams (see docs <a class="reference external" href="https://developer.empatica.com/windows-streaming-server-commands.html">Empatica protocols</a>)</p></li>
-<li><p>After <strong>~2-10</strong> seconds the <strong>subscribed data streams</strong> can be seen <strong>as the visual timeseries</strong> in the frontend.</p></li>
-<li><p>When all data streams are visually represented in the frontend, data can be saved persistently via the <strong>record button</strong>.</p></li>
-</ol>
-<p><em>Data Outputs:</em></p>
+<p><em>Output:</em></p>
 <ul class="simple">
 <li><p>acc - 3-axis acceleration</p></li>
 <li><p>bvp - Blood Volume Pulse</p></li>
@@ -497,8 +491,20 @@ document.write(`
 <li><p>tag - Tag taken from the device (by pressing the button)</p></li>
 </ul>
 </section>
+<section id="codecs">
+<h2><span class="section-number">8.2. </span>Codecs<a class="headerlink" href="#codecs" title="Link to this heading">#</a></h2>
+</section>
+<section id="application-runtime">
+<h2><span class="section-number">8.3. </span>Application runtime<a class="headerlink" href="#application-runtime" title="Link to this heading">#</a></h2>
+<p>The Empatica E4 streaming server is a Middleware which communicates to any third party software via TCP. The default server adress and port is: <strong>localhost (127.0.0.1) and 28000</strong>.</p>
+<ol class="arabic simple">
+<li><p><strong>On Start:</strong> application subscribes to all available Empatica E4 data streams (see docs <a class="reference external" href="https://developer.empatica.com/windows-streaming-server-commands.html">Empatica protocols</a>)</p></li>
+<li><p>After <strong>~2-10</strong> seconds the <strong>subscribed data streams</strong> can be seen <strong>as the visual timeseries</strong> in the frontend.</p></li>
+<li><p>When all data streams are visually represented in the frontend, data can be saved persistently via the <strong>record button</strong>.</p></li>
+</ol>
+</section>
 <section id="important-notes">
-<h2><span class="section-number">8.2. </span>Important notes<a class="headerlink" href="#important-notes" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">8.4. </span>Important notes<a class="headerlink" href="#important-notes" title="Link to this heading">#</a></h2>
 <p>The data stream subscriptions have a delay of <strong>700 milliseconds</strong> between each other. When this delay is set lower or, even worse, to zero, some data streams are not subscribed to and are rejected by the device.</p>
 </section>
 </section>
@@ -567,8 +573,10 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.1. Application runtime</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.2. Important notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">8.1. Sensors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">8.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.3. Application runtime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.4. Important notes</a></li>
 </ul>
   </nav></div>
 

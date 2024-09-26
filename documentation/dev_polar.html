@@ -432,7 +432,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -448,6 +450,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">7.1. Sensors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">7.2. Codecs</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -459,17 +470,24 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="polar-h10">
 <h1><span class="section-number">7. </span>Polar H10<a class="headerlink" href="#polar-h10" title="Link to this heading">#</a></h1>
+<section id="sensors">
+<h2><span class="section-number">7.1. </span>Sensors<a class="headerlink" href="#sensors" title="Link to this heading">#</a></h2>
 <p><strong>Polar H10</strong> (Real-time heart rate signals)</p>
 <ul class="simple">
 <li><p>Electrocardiography sensor (ECG)</p></li>
 <li><p>3-axis accelerometer (XYZ)</p></li>
 </ul>
- <img src="https://support.empatica.com/hc/article_attachments/360000797783" width="300"  /><p><em>Output:</em></p>
+ <img src="https://support.empatica.com/hc/article_attachments/360000797783" width="300"  />
+<p><em>Output:</em></p>
 <ul class="simple">
 <li><p>Heart rate as bpm</p></li>
 <li><p>3-axis acceleration (XYZ): 50Hz, 16bit resolution, Range 8G</p></li>
 <li><p>Skin temperature: 1Hz, 2Hz, 4Hz options, 32 bit resolution</p></li>
 </ul>
+</section>
+<section id="codecs">
+<h2><span class="section-number">7.2. </span>Codecs<a class="headerlink" href="#codecs" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -526,6 +544,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">7.1. Sensors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">7.2. Codecs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
