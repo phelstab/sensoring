@@ -62,7 +62,7 @@
     <link rel="icon" href="_static/fav.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Introduction" href="documentation/introduction.html" />
+    <link rel="next" title="1. Motivation" href="documentation/motivation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -151,14 +151,8 @@
   
   
   
-    
-    
-      
-    
-    
-    <img src="_static/logo.png" class="logo__image only-light" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>`);</script>
   
+    <p class="title logo__title">Real-Time Multi-Modal Audio, Video and Physiological Data Collection</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -176,8 +170,8 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="documentation/introduction.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation/motivation.html">2. Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/motivation.html">1. Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/theory.html">2. Theoretical Background</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation &amp; User Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -455,7 +449,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defined-milestones">Defined Milestones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensor-information">Sensor Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#milestones">Milestones</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
             </nav>
@@ -471,35 +466,27 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="real-time-multi-modal-audio-video-and-physiological-data-collection">
 <h1>Real-Time Multi-Modal Audio, Video and Physiological Data Collection<a class="headerlink" href="#real-time-multi-modal-audio-video-and-physiological-data-collection" title="Link to this heading">#</a></h1>
 <p><em>by Paul Helstab &amp; Danila Mamontov</em></p>
-<div class="alert alert-info"><b>Initial Goal</b><br />
-To prepare <b>equipment and sensors</b> for complex data collection (<b>audio, video, physiology, eye and body tracking</b>) during a VR experiment aimed at studying the user’s state while passing a maze under stressful conditions
+<p><strong>Repository</strong>:</br> <a class="github reference external" href="https://github.com/phelstab/sensoring">phelstab/sensoring</a></p>
+<img src="_static/images/repo.png" width="100" height="100" style="float: left; margin-right: 10px;">
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+<p><strong>Documentation / Online Book</strong>:</br> <a class="reference external" href="https://phelstab.github.io/sensoring">https://phelstab.github.io/sensoring</a></p>
+<img src="_static/images/sensor.png" width="100" height="100" style="float: left; margin-right: 10px; clear: left;">
+<div class="alert alert-info"><b>INFO</b><br />
+This repository is a <b>third party software project</b> for <b>real-time data</b> acquisition and <b>visualization</b> of audio, video, and physiological signals with <b>Polar H10</b>, <b>Empatica E4</b>, and <b>Azure Kinect DK</b> sensors.
 </div>
-<p><strong>Our Goal:</strong></p>
-<ul class="simple">
-<li><p><strong>Real-time</strong> data acquisition and visualization of audio, video and physiological signals</p></li>
-</ul>
-<p><strong>Initial thoughts:</strong></p>
-<ul class="simple">
-<li><p>Which sensors are we dealing with in the first place?</p></li>
-<li><p>What sensor data do we get?</p></li>
-<li><p>Check the SDK’s / API’s of the sensors</p></li>
-<li><p>Specific Hardware needed?</p></li>
-<li><p>Real time data and Recording?</p>
-<ul>
-<li><p>Visualisation</p></li>
-<li><p>Consider delays and losses</p></li>
-<li><p>How to record together in parallel via several connectors?</p></li>
-</ul>
-</li>
-<li><p>Define architecture</p></li>
-<li><p>…</p></li>
-</ul>
-<p><strong>Provided Sensors:</strong></p>
 <ul class="simple">
 <li><p><strong>Empatica E4</strong> (Real-time physiological signal sensoring)</p></li>
 <li><p><strong>Polar H10</strong> (Real-time heart rate signal sensoring)</p></li>
 <li><p><strong>Azure Kinect Developer Kit</strong> (3D spatial information sensor device to create computer vision and speech model applications)</p></li>
 </ul>
+<section id="sensor-information">
+<h2>Sensor Information<a class="headerlink" href="#sensor-information" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Device</p></th>
@@ -597,65 +584,10 @@ To prepare <b>equipment and sensors</b> for complex data collection (<b>audio, v
 </tbody>
 </table>
 </div>
-<p><span id="id1">[<a class="reference internal" href="documentation/bibliography.html#id3" title="orbbec. Femto bolt comparison with azure kinect dk - orbbec - 3d vision for a 3d world. https://www.orbbec.com/documentation/comparison-with-azure-kinect-dk/, 09 2024. (Accessed on 09/26/2024).">orbbec, 2024</a>]</span></p>
-<ul class="simple">
-<li><p>Important is the <strong>distinction</strong> between PPG (optical) and ECG (electrodes) where ECG serves as the gold standard for accuracy.</p></li>
-</ul>
-<p><strong>ECG:</strong></p>
-<ul class="simple">
-<li><p>Polar H10 <em>potentially</em> uses two electrodes that make direct contact with the skin.</p></li>
-<li><p>These electrodes are made of conductive materials <em>potentially</em> silver or silver chloride (Ag/AgCl) that can detect the small electrical signals generated by the heart.</p></li>
-</ul>
-<p>This information can’t be proven because there is no in detail public information available about this sensor.</p>
-<div class="alert alert-info"><b>INFO</b><br />
-The electrodes in contact with the skin detect the small electrical signals generated by the <b>heart's contractions</b>, measuring the voltage difference between them to produce an electrocardiogram signal.
-</div>
-<p><strong>PPG:</strong></p>
-<ul class="simple">
-<li><p>E4’s PPG sensor contains light-emitting diodes (LEDs) with a total 14 mm² sensitive area, that emit light into the skin.</p>
-<ul>
-<li><p>Specifically, it uses green (2 LEDs) and red (2 LEDs) wavelengths.</p></li>
-</ul>
-</li>
-</ul>
-<div class="alert alert-info"><b>INFO</b><br />
-As the heart pumps blood through the body, the volume of blood in the capillaries under the skin changes. <b>This affects how much light is absorbed or reflected back to the photodiodes.</b>
-</div><p><strong>Challenges:</strong></p>
-<ul class="simple">
-<li><p><strong>Empatica E4</strong></p>
-<ul>
-<li><p>Poor proprietary recording software with inaccurate data acquisition and no real time function</p></li>
-<li><p>Little to non-existent developer community around the SDK</p></li>
-<li><p>Complicated development of own software and obligation to use very specific hardware</p></li>
-</ul>
-</li>
-</ul>
-<ul class="simple">
-<li><p><strong>Polar H10</strong></p>
-<ul>
-<li><p>Proprietary recording software works well but is intended more for athletes</p>
-<ul>
-<li><p>No good realtime monitoring</p></li>
-</ul>
-</li>
-<li><p>Hardly any open source projects that use the sensor work reliable</p></li>
-</ul>
-</li>
-</ul>
-<ul class="simple">
-<li><p><strong>Azure Kinect Developer Kit</strong></p>
-<ul>
-<li><p>Large developer community for projects of all kinds, but no projects with parallel audio and video recording</p></li>
-<li><p>Very unstable recording software with very poor audio recording (audio/video drift)</p>
-<ul>
-<li><p>Developed as a CLI application</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<section id="defined-milestones">
-<h2>Defined Milestones<a class="headerlink" href="#defined-milestones" title="Link to this heading">#</a></h2>
+<p><span id="id1">[<a class="reference internal" href="documentation/bibliography.html#id3" title="orbbec. Femto bolt comparison with azure kinect dk - orbbec - 3d vision for a 3d world. https://www.orbbec.com/documentation/comparison-with-azure-kinect-dk/, 09 2024. (Accessed on 09/26/2024).">orbbec, 2024</a>]</span>, <span id="id2">[<a class="reference internal" href="documentation/bibliography.html#id4" title="Empatica. E4 wristband technical specifications – empatica support. https://support.empatica.com/hc/en-us/articles/202581999-E4-wristband-technical-specifications, 09 2024. (Accessed on 09/26/2024).">Empatica, 2024</a>]</span>, <span id="id3">[<a class="reference internal" href="documentation/bibliography.html#id5" title="Polar. H10 user manual | technical specifications. https://support.polar.com/e_manuals/h10-heart-rate-sensor/polar-h10-user-manual-english/technical-specifications.htm, 09 2024. (Accessed on 09/26/2024).">Polar, 2024</a>]</span>, <span id="id4">[<a class="reference internal" href="documentation/bibliography.html#id6" title="Samuli Määttä. Polar-ble-sdk/readme.md at master · polarofficial/polar-ble-sdk. https://github.com/polarofficial/polar-ble-sdk/blob/master/README.md, 09 2024. (Accessed on 09/26/2024).">Määttä, 2024</a>]</span></p>
+</section>
+<section id="milestones">
+<h2>Milestones<a class="headerlink" href="#milestones" title="Link to this heading">#</a></h2>
 <ul class="contains-task-list simple">
 <li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Lightweight real time data acquisition of <strong>Polar H10</strong> Sensors</p></li>
 <li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Lightweight real time data acquisition of <strong>Empatica E4</strong> Sensors</p></li>
@@ -683,7 +615,7 @@ As the heart pumps blood through the body, the volume of blood in the capillarie
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><span id="id2">[<a class="reference internal" href="documentation/bibliography.html#id2" title="Icons8. Elektrische sensor electric icon. https://icon-icons.com/de/symbol/elektrische-Sensor-electric/2677, 09 2024. (Accessed on 09/24/2024).">Icons8, 2024</a>]</span></p></li>
+<li><p><span id="id5">[<a class="reference internal" href="documentation/bibliography.html#id2" title="Icons8. Elektrische sensor electric icon. https://icon-icons.com/de/symbol/elektrische-Sensor-electric/2677, 09 2024. (Accessed on 09/24/2024).">Icons8, 2024</a>]</span></p></li>
 </ul>
 </section>
 <div class="toctree-wrapper compound">
@@ -727,11 +659,11 @@ As the heart pumps blood through the body, the volume of blood in the capillarie
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="documentation/introduction.html"
+       href="documentation/motivation.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Introduction</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Motivation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -751,7 +683,8 @@ As the heart pumps blood through the body, the volume of blood in the capillarie
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defined-milestones">Defined Milestones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensor-information">Sensor Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#milestones">Milestones</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
   </nav></div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2. Motivation &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
+    <title>1. Motivation &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
   
   
   
@@ -62,8 +62,8 @@
     <link rel="icon" href="../_static/fav.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Setup Polar H10" href="doc_polar.html" />
-    <link rel="prev" title="1. Introduction" href="introduction.html" />
+    <link rel="next" title="2. Theoretical Background" href="theory.html" />
+    <link rel="prev" title="Real-Time Multi-Modal Audio, Video and Physiological Data Collection" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -150,14 +150,8 @@
   
   
   
-    
-    
-      
-    
-    
-    <img src="../_static/logo.png" class="logo__image only-light" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>`);</script>
   
+    <p class="title logo__title">Real-Time Multi-Modal Audio, Video and Physiological Data Collection</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -175,8 +169,8 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Motivation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">2. Theoretical Background</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation &amp; User Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -457,7 +451,41 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="motivation">
-<h1><span class="section-number">2. </span>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">1. </span>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h1>
+<div class="alert alert-info"><b>Initial Goal</b><br />
+To prepare <b>equipment and sensors</b> for complex data collection (<b>audio, video, physiology, eye and body tracking</b>) during a VR experiment aimed at studying the user’s state while passing a maze under stressful conditions
+</div>
+<p><strong>Our Goal:</strong></p>
+<ul class="simple">
+<li><p><strong>Real-time</strong> data acquisition and visualization of audio, video and physiological signals</p></li>
+</ul>
+<div class="alert alert-warning">
+Parallel processing and recording of different data streams can be a <b>challenge</b>, especially if the sensors react <b>sensitively</b> and the underlying software is not really <b>stable</b>.
+</div><p><strong>Initial thoughts:</strong></p>
+<ul class="simple">
+<li><p>Which sensors are we dealing with in the first place?</p></li>
+<li><p>What sensor data do we get?</p></li>
+<li><p>Check the SDK’s / API’s of the sensors</p></li>
+<li><p>Specific Hardware needed?</p></li>
+<li><p>Real time data and Recording?</p>
+<ul>
+<li><p>Visualisation</p></li>
+<li><p>Consider delays and losses</p></li>
+<li><p>How to record together in parallel via several connectors?</p></li>
+</ul>
+</li>
+<li><p>Define architecture</p></li>
+<li><p>…</p></li>
+</ul>
+<p><strong>Plan (ordered in priority):</strong></p>
+<ul class="simple">
+<li><p>Stable data aquisition without losses</p></li>
+<li><p>Lightweight software for performance and low complexity</p></li>
+<li><p>Real time visualisations for supervising data aquisition during experiment</p></li>
+<li><p>Pipeline for versioning and fast deployments</p></li>
+<li><p>Clean code architecture for further development</p></li>
+</ul>
+<p>One main goal is to be able to use the different sensor software for <strong>experiments of all kinds</strong>, with <strong>little effort</strong> to extend <strong>features</strong> and develop improvements.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -491,20 +519,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="introduction.html"
+       href="../index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Introduction</p>
+        <p class="prev-next-title">Real-Time Multi-Modal Audio, Video and Physiological Data Collection</p>
       </div>
     </a>
     <a class="right-next"
-       href="doc_polar.html"
+       href="theory.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3. </span>Setup Polar H10</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Theoretical Background</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

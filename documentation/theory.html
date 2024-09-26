@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>1. Introduction &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
+    <title>2. Theoretical Background &#8212; Real-Time Multi-Modal Audio, Video and Physiological Data Collection</title>
   
   
   
@@ -57,13 +57,13 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/introduction';</script>
-    <link rel="canonical" href="https://phelstab.github.io/sensoring/documentation/introduction.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/theory';</script>
+    <link rel="canonical" href="https://phelstab.github.io/sensoring/documentation/theory.html" />
     <link rel="icon" href="../_static/fav.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="2. Motivation" href="motivation.html" />
-    <link rel="prev" title="Real-Time Multi-Modal Audio, Video and Physiological Data Collection" href="../index.html" />
+    <link rel="next" title="3. Setup Polar H10" href="doc_polar.html" />
+    <link rel="prev" title="1. Motivation" href="motivation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -150,14 +150,8 @@
   
   
   
-    
-    
-      
-    
-    
-    <img src="../_static/logo.png" class="logo__image only-light" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Real-Time Multi-Modal Audio, Video and Physiological Data Collection - Home"/>`);</script>
   
+    <p class="title logo__title">Real-Time Multi-Modal Audio, Video and Physiological Data Collection</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -175,8 +169,8 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="motivation.html">2. Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">1. Motivation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Theoretical Background</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation &amp; User Guide</span></p>
 <ul class="nav bd-sidenav">
@@ -247,7 +241,7 @@
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/phelstab/sensoring/master?urlpath=tree/documentation/introduction.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/phelstab/sensoring/master?urlpath=tree/documentation/theory.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Binder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -265,7 +259,7 @@
       
       
       
-      <li><a href="https://colab.research.google.com/github/phelstab/sensoring/blob/master/documentation/introduction.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/phelstab/sensoring/blob/master/documentation/theory.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Colab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -313,7 +307,7 @@
       
       
       
-      <li><a href="https://github.com/phelstab/sensoring/edit/main/documentation/introduction.ipynb" target="_blank"
+      <li><a href="https://github.com/phelstab/sensoring/edit/main/documentation/theory.ipynb" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -330,7 +324,7 @@
       
       
       
-      <li><a href="https://github.com/phelstab/sensoring/issues/new?title=Issue%20on%20page%20%2Fdocumentation/introduction.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/phelstab/sensoring/issues/new?title=Issue%20on%20page%20%2Fdocumentation/theory.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -360,7 +354,7 @@
       
       
       
-      <li><a href="../_sources/documentation/introduction.ipynb" target="_blank"
+      <li><a href="../_sources/documentation/theory.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -431,7 +425,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -442,11 +438,23 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Introduction</h1>
+    <h1>Theoretical Background</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">2.1. Sensors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specifications">2.1.1. Specifications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.2. Theoretical Background</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -456,8 +464,170 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="theoretical-background">
+<h1><span class="section-number">2. </span>Theoretical Background<a class="headerlink" href="#theoretical-background" title="Link to this heading">#</a></h1>
+<section id="sensors">
+<h2><span class="section-number">2.1. </span>Sensors<a class="headerlink" href="#sensors" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Empatica E4</strong> (Real-time physiological signal sensoring)</p></li>
+<li><p><strong>Polar H10</strong> (Real-time heart rate signal sensoring)</p></li>
+<li><p><strong>Azure Kinect Developer Kit</strong> (3D spatial information sensor device to create computer vision and speech model applications)</p></li>
+</ul>
+<section id="specifications">
+<h3><span class="section-number">2.1.1. </span>Specifications<a class="headerlink" href="#specifications" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>Sensors</p></th>
+<th class="head"><p>Data Stream</p></th>
+<th class="head"><p>Frequency (set to)</p></th>
+<th class="head"><p>Output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Empatica E4</strong></p></td>
+<td><p>Photoplethysmography sensor (PPG)</p></td>
+<td><p>Blood Volume Pressure <b>(BVP)</b></p></td>
+<td><p>64Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+<td><p>Heart Rate <b>(HR)</b></p></td>
+<td><p>event-based (derived from BVP)</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p></p></td>
+<td><p>Interbeat Interval <b>(IBI)</b></p></td>
+<td><p>event-based (derived from BVP)</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Electrodermal activity sensor (EDA)</p></td>
+<td><p>Galvanic skin response <b>(GSR)</b></p></td>
+<td><p>4Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>3-axis accelerometer</p></td>
+<td><p>XYZ-axes per timestep <b>(ACC)</b></p></td>
+<td><p>32Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Optical thermometer (probably infrared)</p></td>
+<td><p>Skin temperature <br>in celsius per timestep <b>(TEMP)</b></p></td>
+<td><p>4Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span id="id1">[<a class="reference internal" href="bibliography.html#id4" title="Empatica. E4 wristband technical specifications – empatica support. https://support.empatica.com/hc/en-us/articles/202581999-E4-wristband-technical-specifications, 09 2024. (Accessed on 09/26/2024).">Empatica, 2024</a>]</span></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>Sensors</p></th>
+<th class="head"><p>Data Stream</p></th>
+<th class="head"><p>Frequency (set to)</p></th>
+<th class="head"><p>Output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Polar H10</strong></p></td>
+<td><p>Electrocardiography sensor (ECG)</p></td>
+<td><p>ECG data <b>(ECG)</b><br>electric potential in microvolts (μV)</p></td>
+<td><p>130Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+<td><p>Interbeat Interval <b>(IBI)</b></p></td>
+<td><p>event-based (derived from ECG)</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p></p></td>
+<td><p>Heart Rate <b>(HR)</b></p></td>
+<td><p>event-based (derived from ECG)</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>3-axis accelerometer (XYZ)</p></td>
+<td><p>XYZ-axes per timestep <b>(ACC)</b></p></td>
+<td><p>200Hz</p></td>
+<td><p>.csv</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span id="id2">[<a class="reference internal" href="bibliography.html#id5" title="Polar. H10 user manual | technical specifications. https://support.polar.com/e_manuals/h10-heart-rate-sensor/polar-h10-user-manual-english/technical-specifications.htm, 09 2024. (Accessed on 09/26/2024).">Polar, 2024</a>]</span>, <span id="id3">[<a class="reference internal" href="bibliography.html#id6" title="Samuli Määttä. Polar-ble-sdk/readme.md at master · polarofficial/polar-ble-sdk. https://github.com/polarofficial/polar-ble-sdk/blob/master/README.md, 09 2024. (Accessed on 09/26/2024).">Määttä, 2024</a>]</span></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>Sensors</p></th>
+<th class="head"><p>Data Stream</p></th>
+<th class="head"><p>Frequency (set to)</p></th>
+<th class="head"><p>Output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Azure Kinect DK</strong></p></td>
+<td><p>Depth camera: 1MP Time-of-flight</p></td>
+<td><p>NFOV unbinned: 640x576 </br> NFOV 2x2 binned: 320x288</br> WFOV 2x2 binned: 512x512</br> WFOV unbinned: 1024x1024</br> Passive IR: 1024x1024</p></td>
+<td><p>0, 5, 15, or 30 FPS</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>RGB camera: 12MP CMOS sensor rolling shutter</p></td>
+<td><p>3840x2160 (UHD)</br>2560x1440 (QHD)</br>1920x1080 (FHD)</br>1280x720 (HD)</p></td>
+<td><p>0, 5, 15, or 30 FPS</p></td>
+<td><p>.mkv</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>IMU (Inertial Measurement Unit): 3D accelerometer and gyroscope</p></td>
+<td><p>XYZ-axes linear acceleration in (m/s²);</br>XYZ-axes rotational speed (rad/s)</p></td>
+<td><p>Sampling rate: 1.6 kHz</br>Reporting rate to host: 208 Hz</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Microphone: 7-microphone circular array</p></td>
+<td><p>Channel Count: 7 channels</br>Sample Format: 16-bit integer (Int16)</p></td>
+<td><p>Sample Rate: 16000 Hz (16 kHz)</p></td>
+<td><p>.wav</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span id="id4">[<a class="reference internal" href="bibliography.html#id3" title="orbbec. Femto bolt comparison with azure kinect dk - orbbec - 3d vision for a 3d world. https://www.orbbec.com/documentation/comparison-with-azure-kinect-dk/, 09 2024. (Accessed on 09/26/2024).">orbbec, 2024</a>]</span></p>
+<ul class="simple">
+<li><p>Important is the <strong>distinction</strong> between PPG (optical) and ECG (electrodes) where ECG serves as the gold standard for accuracy.</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">2.2. </span>Theoretical Background<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p><strong>ECG:</strong></p>
+<ul class="simple">
+<li><p>Polar H10 <em>potentially</em> uses two electrodes that make direct contact with the skin.</p></li>
+<li><p>These electrodes are made of conductive materials <em>potentially</em> silver or silver chloride (Ag/AgCl) that can detect the small electrical signals generated by the heart.</p></li>
+</ul>
+<p>This information can’t be proven because there is no in detail public information available about this sensor.</p>
+<div class="alert alert-info"><b>INFO</b><br />
+The electrodes in contact with the skin detect the small electrical signals generated by the <b>heart's contractions</b>, measuring the voltage difference between them to produce an electrocardiogram signal.
+</div>
+<p><strong>PPG:</strong></p>
+<ul class="simple">
+<li><p>E4’s PPG sensor contains light-emitting diodes (LEDs) with a total 14 mm² sensitive area, that emit light into the skin.</p>
+<ul>
+<li><p>Specifically, it uses green (2 LEDs) and red (2 LEDs) wavelengths.</p></li>
+</ul>
+</li>
+</ul>
+<div class="alert alert-info"><b>INFO</b><br />
+As the heart pumps blood through the body, the volume of blood in the capillaries under the skin changes. <b>This affects how much light is absorbed or reflected back to the photodiodes.</b>
+</div></section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -491,20 +661,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../index.html"
+       href="motivation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Real-Time Multi-Modal Audio, Video and Physiological Data Collection</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Motivation</p>
       </div>
     </a>
     <a class="right-next"
-       href="motivation.html"
+       href="doc_polar.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Motivation</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Setup Polar H10</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -514,6 +684,25 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">2.1. Sensors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specifications">2.1.1. Specifications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.2. Theoretical Background</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
