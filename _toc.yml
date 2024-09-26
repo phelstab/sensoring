@@ -8,8 +8,8 @@ parts:
     numbered: true
     maxdepth: 2
     chapters:
-      - file: documentation/introduction
       - file: documentation/motivation
+      - file: documentation/theory
   - caption: Installation & User Guide
     numbered: true
     maxdepth: 2
