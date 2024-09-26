@@ -455,9 +455,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">5.1. Requirements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">5.2. Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">5.3. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">5.1. References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">5.2. Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">5.2.1. Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">5.2.2. Software</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">5.3. Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">5.4. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">5.5. Important notes</a></li>
 </ul>
             </nav>
         </div>
@@ -471,26 +477,75 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="setup-azure-kinect-dk">
 <h1><span class="section-number">5. </span>Setup Azure Kinect DK<a class="headerlink" href="#setup-azure-kinect-dk" title="Link to this heading">#</a></h1>
-<p><a class="github reference external" href="https://github.com/unerue/pykinect-recorder">unerue/pykinect-recorder</a></p>
-<ol class="arabic simple">
-<li><p>Install: Azure Kinect SDK 1.4.1.exe &gt;&gt; <a class="github reference external" href="https://github.com/microsoft/Azure-Kinect-Sensor-SDK/blob/develop/docs/usage.md">microsoft/Azure-Kinect-Sensor-SDK</a> (WICHTIG die 1.4.1)</p></li>
-<li><p>Install: Azure Kinect Body Tracking SDK 1.0.1 <a class="reference external" href="https://www.microsoft.com/en-us/download/details.aspx?id=100942">https://www.microsoft.com/en-us/download/details.aspx?id=100942</a></p></li>
-<li><p>Add following to environment variables:</p></li>
-</ol>
+<section id="references">
+<h2><span class="section-number">5.1. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This application is made possible by the previous work of following projects:</p>
 <ul class="simple">
-<li><p>C:\Program Files\Azure Kinect SDK v1.4.1\sdk\windows-desktop\amd64\release\bin</p></li>
-<li><p>C:\Program Files\Azure Kinect Body Tracking SDK\sdk\windows-desktop\amd64\release\bin</p></li>
-<li><p>C:\Program Files\Azure Kinect Body Tracking SDK\tools</p></li>
+<li><p>Kyung-Su Kang (&#64;unerue | <a class="reference external" href="https://github.com/unerue/pykinect-recorder">pykinect-recorder</a>)</p></li>
+<li><p>&#64;etiennedub et al. | <a class="reference external" href="https://github.com/etiennedub/pyk4a">pyk4a</a></p></li>
+<li><p>Gutekanst et al. | <a class="reference external" href="https://github.com/hexops-graveyard/Azure-Kinect-Python">Azure-Kinect-Python</a></p></li>
 </ul>
-<!-- pip install pykinect_azure
-https://github.com/ibaiGorordo/pyKinectAzure/tree/master/examples --><section id="requirements">
-<h2><span class="section-number">5.1. </span>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+</section>
+<section id="requirements">
+<h2><span class="section-number">5.2. </span>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+<section id="hardware">
+<h3><span class="section-number">5.2.1. </span>Hardware<a class="headerlink" href="#hardware" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Azure Kinect DK</p></li>
+<li><p>USB to USBC Cable</p></li>
+<li><p>USB to Barrel connector</p></li>
+</ul>
+</section>
+<section id="software">
+<h3><span class="section-number">5.2.2. </span>Software<a class="headerlink" href="#software" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Azure Kinect SDK 1.4.1 (see <a class="reference external" href="https://github.com/microsoft/Azure-Kinect-Sensor-SDK/blob/develop/docs/usage.md">Kinect SDK</a>)</p>
+<ul>
+<li><p>Important: use 1.4.1</p></li>
+</ul>
+</li>
+<li><p>Optional for now: Azure Kinect Body Tracking SDK 1.0.1 (see <a class="reference external" href="https://www.microsoft.com/en-us/download/details.aspx?id=100942">Kinect Body Tracking SDK</a>)</p></li>
+</ul>
+</section>
 </section>
 <section id="installation">
-<h2><span class="section-number">5.2. </span>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">5.3. </span>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Install software from chapter requirements (keep path as default).</p></li>
+<li><p>Add following paths to Windows Environment Variables</p></li>
+<li><p>Win Key + R</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">rundll32.exe sysdm.cpl,EditEnvironmentVariables</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Add to <strong>Path</strong>: <br></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Azure</span> <span class="n">Kinect</span> <span class="n">SDK</span> <span class="n">v1</span><span class="mf">.4.1</span>\<span class="n">sdk</span>\<span class="n">windows</span><span class="o">-</span><span class="n">desktop</span>\<span class="n">amd64</span>\<span class="n">release</span>\<span class="nb">bin</span> <span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+    <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Azure</span> <span class="n">Kinect</span> <span class="n">Body</span> <span class="n">Tracking</span> <span class="n">SDK</span>\<span class="n">sdk</span>\<span class="n">windows</span><span class="o">-</span><span class="n">desktop</span>\<span class="n">amd64</span>\<span class="n">release</span>\<span class="nb">bin</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+    <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Azure</span> <span class="n">Kinect</span> <span class="n">Body</span> <span class="n">Tracking</span> <span class="n">SDK</span>\<span class="n">tools</span><span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Please check by open the windows <strong>device manager</strong> (kinect shoud should be visible as microphone array and the depth camera + 4K camera as USB serial bus):<br>
+<img src="../_static/images/kinect_driver.png" width="500" style="float: left; margin-right: 10px;"></p></li>
+</ol>
 </section>
 <section id="usage">
-<h2><span class="section-number">5.3. </span>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">5.4. </span>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>If all steps in the chapter Installation are made the application can be started.</p></li>
+<li><p>Toggle the slider on the top right corner to establish a connection to the Azure Kinect DK.</p></li>
+<li><p>The triangle starts the “viewer” mode without recording.</p></li>
+<li><p>By pressing “#” or via button (red dot), the recording can be started.</p></li>
+</ol>
+</section>
+<section id="important-notes">
+<h2><span class="section-number">5.5. </span>Important notes<a class="headerlink" href="#important-notes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Data cable must be plugged to USB 3.0 (or newer)</p></li>
+<li><p>The .mkv video data is a raw video footage which is very data intensive (7GB per Minute by default settings), please only record on a fast and big SSD drive for the best performance and no storage issues.</p></li>
+</ul>
 </section>
 </section>
 
@@ -558,9 +613,15 @@ https://github.com/ibaiGorordo/pyKinectAzure/tree/master/examples --><section id
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">5.1. Requirements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">5.2. Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">5.3. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">5.1. References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">5.2. Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">5.2.1. Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">5.2.2. Software</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">5.3. Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">5.4. Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">5.5. Important notes</a></li>
 </ul>
   </nav></div>
 

@@ -455,7 +455,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">4.1. Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">4.1. Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">4.1.1. Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accounts">4.1.2. Accounts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key">4.1.3. Key</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">4.1.4. Software</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">4.2. Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">4.3. Usage</a></li>
 </ul>
@@ -471,22 +477,65 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="setup-empatica-e4">
 <h1><span class="section-number">4. </span>Setup Empatica E4<a class="headerlink" href="#setup-empatica-e4" title="Link to this heading">#</a></h1>
-<p><a class="reference external" href="https://developer.empatica.com/windows-streaming-server.html">https://developer.empatica.com/windows-streaming-server.html</a>
-<a class="reference external" href="https://developer.empatica.com/windows-streaming-server-usage.html">https://developer.empatica.com/windows-streaming-server-usage.html</a>
-<a class="github reference external" href="https://github.com/molguin92/open-e4-client">molguin92/open-e4-client</a></p>
-<p>Dashboard+API Key:
-<a class="reference external" href="https://e4.empatica.com/connect/dashboard.php#create">https://e4.empatica.com/connect/dashboard.php#create</a></p>
-<p>Important the E4 must be registered to an specific account after the the API key becomes usable</p>
-<p>Firmware Upgrade:
-<a class="reference external" href="https://e4.empatica.com/empatica-manager-download">https://e4.empatica.com/empatica-manager-download</a></p>
 <section id="requirements">
 <h2><span class="section-number">4.1. </span>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+<section id="hardware">
+<h3><span class="section-number">4.1.1. </span>Hardware<a class="headerlink" href="#hardware" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Physical Empatica E4 Device</p></li>
+<li><p>Bluegiga Bluetooth Smart Dongle <strong>BLED112</strong>, the Empatica E4 only works on this Hardware (see <a class="reference external" href="https://www.silabs.com/wireless/bluetooth/bluegiga-low-energy-legacy-modules/device.bled112?tab=specs">BLED112 Specs</a>)</p>
+<ul>
+<li><p>can be bought for cheap on AliExpress (see <a class="reference external" href="https://de.aliexpress.com/w/wholesale-BLED112.html?spm=a2g0o.home.search.0">BLED112 on AliExpress, NO affiliate link</a>)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="accounts">
+<h3><span class="section-number">4.1.2. </span>Accounts<a class="headerlink" href="#accounts" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Empatica E4 Account (see <a class="reference external" href="https://e4.empatica.com/connect/login.php">E4 Dashboard Login</a>)</p></li>
+</ul>
+</section>
+<section id="key">
+<h3><span class="section-number">4.1.3. </span>Key<a class="headerlink" href="#key" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Purchase Key</strong> of Empatica E4 Device <strong>OR</strong> permitted account via <strong>Shared Device</strong> (see <a class="reference external" href="https://e4.empatica.com/connect/developer.php">E4 Developer Dashboard</a>)</p></li>
+</ul>
+</section>
+<section id="software">
+<h3><span class="section-number">4.1.4. </span>Software<a class="headerlink" href="#software" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Empatica E4 Streaming Server / Windows only (download here: <a class="reference external" href="http://get.empatica.com/win/EmpaticaBLEServer.html">E4 Streaming Server</a>)</p></li>
+<li><p>Bluegiga Bluetooth Smart Dongle BLED112 <strong>Driver</strong> (download here: <a class="reference external" href="https://www.silabs.com/documents/login/software/BLED112-Signed-Win-Drv.zip">BLED112 Driver</a>)</p></li>
+<li><p>Visual C++ Redistributable Package installed</p></li>
+</ul>
+</section>
 </section>
 <section id="installation">
 <h2><span class="section-number">4.2. </span>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Register a Developer Account in the Empatica e4 dashboard (see <a class="reference external" href="https://e4.empatica.com/connect/login.php">E4 Dashboard Login</a>)</p></li>
+<li><p>The Empatica Devices must be <strong>registered via key</strong> as purchased device or the account must be permitted as a <strong>shared device</strong> (in this dashboard <a class="reference external" href="https://e4.empatica.com/connect/developer.php">E4 Developer Dashboard</a>)</p></li>
+<li><p>Follow installation steps here: <a class="reference external" href="https://developer.empatica.com/windows-streaming-server-usage.html">E4 Streaming Server Docs</a></p></li>
+<li><p>If everything done correct, you can see in the <strong>Empatica E4 Streaming Server</strong>, the <strong>connection established</strong> with a green button.</p>
+<ul class="simple">
+<li><p>If <strong>not allowed</strong> with 0% battery shows up, your account/API key is not registered to the device or there is a bug with the Empatica Device which can only be resolved when Empatica E4 is factory resetted (see here how: <a class="reference external" href="https://support.empatica.com/hc/en-us/articles/115002451586-E4-Firmware-upgrade-aborted-E4-displays-steady-green-LED#:~:text=Reset%20the%20E4%20wristband%20by,start%20the%20firmware%20upgrade%20process">E4 Factory Reset</a>.)</p>
+<ul>
+<li><p>If still not working try to upgrade software version via the Empatica manager software <a class="reference external" href="https://e4.empatica.com/empatica-manager-download">Empatica Manager</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 </section>
 <section id="usage">
 <h2><span class="section-number">4.3. </span>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>After connection established in the <strong>Empatica E4 Streaming Server</strong> the data aquisition software can be started.</p></li>
+<li><p>The data streams are subscribed automatically.</p></li>
+<li><p>The data becomes visible after ~2-10 seconds as timeseries plots.</p></li>
+<li><p>The recording can be started by pressing “#” or via button.</p></li>
+</ol>
 </section>
 </section>
 
@@ -554,7 +603,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">4.1. Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">4.1. Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware">4.1.1. Hardware</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accounts">4.1.2. Accounts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key">4.1.3. Key</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software">4.1.4. Software</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">4.2. Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">4.3. Usage</a></li>
 </ul>
