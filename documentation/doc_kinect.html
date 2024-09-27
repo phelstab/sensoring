@@ -551,17 +551,21 @@ document.write(`
 <section id="executable-pyinstaller-bundling">
 <h2><span class="section-number">5.6. </span>Executable (pyinstaller bundling)<a class="headerlink" href="#executable-pyinstaller-bundling" title="Link to this heading">#</a></h2>
 <p>To bunde the application to a <strong>portable .exe on windows</strong> with following steps:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>created
-<span class="go">python -m venv venv</span>
-
-<span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>activated
-<span class="go">.\venv\Scripts\activate </span>
-
-<span class="gp"># </span>If<span class="w"> </span>not<span class="w"> </span>already<span class="w"> </span>installed
-<span class="go">pip install -r requirements.txt</span>
-
-<span class="go">cd Kinect</span>
-<span class="go">pyinstaller --clean --onefile --add-data &quot;pykinect_recorder;pykinect_recorder&quot; --name Kinect main.py</span>
+<p>If not already created/installed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv venv</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">.\venv\Scripts\activate </span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
+</pre></div>
+</div>
+<p>Bundling:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd Kinect</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pyinstaller --clean --onefile --add-data &quot;pykinect_recorder;pykinect_recorder&quot; --name Kinect main.py</span>
 </pre></div>
 </div>
 <p>The bundled .exe can be found in the <strong>dist</strong> folder after finish.</p>
