@@ -432,7 +432,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -448,6 +450,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-pipeline">6.1. Build Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-pipeline">6.2. GitHub Pages Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pipeline-rates">6.3. Github Pipeline Rates:</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -459,10 +471,58 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pipeline">
 <h1><span class="section-number">6. </span>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">#</a></h1>
-<p>python version: 3.11</p>
-<p>Github Pipeline Rates:
-<a class="reference external" href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions">https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions</a></p>
-<p>Windows server rate is 1500 minutes</p>
+<section id="build-pipeline">
+<h2><span class="section-number">6.1. </span>Build Pipeline<a class="headerlink" href="#build-pipeline" title="Link to this heading">#</a></h2>
+<p>For building and deploying our applications we set up a GitHub build pipeline (<code class="docutils literal notranslate"><span class="pre">build.yml</span></code>).
+The pipeline server must be a windows server instance because our applications are mainly distributed on Windows OS.</p>
+<p><strong>The build pipeline is only triggered when adding a version tag to the commit (e.g. v1.0.1) according following formatting:</strong></p>
+<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span>on:
+  push:
+    tags:
+      - &#39;v*.*.*&#39;
+</pre></div>
+</div>
+</section>
+<section id="github-pages-pipeline">
+<h2><span class="section-number">6.2. </span>GitHub Pages Pipeline<a class="headerlink" href="#github-pages-pipeline" title="Link to this heading">#</a></h2>
+<p>The GitHub Pages pipeline deploys the documentation of the entire project and its subprojects to a GitHub Pages site as a Jupyter Book. With Jupyter Book, in combination with GitHub’s Pages functionality, you can deploy Jupyter Notebooks and Markdown-like pages as an online book/resource. The idea comes from Professor Wu from the University of Tennessee (see <a class="reference external" href="https://github.com/giswqs/cookiecutter-jupyter-book">Cookiecutter Jupyter Book</a>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">deploy.yml</span></code> file in the repository deploys the project as a GitHub Pages site.
+The pipeline server runs stabilly via python 3.9 (ubuntu).</p>
+<p>Building the Jupyter Book locally can be done via the following commands:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv venv</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">.\venv\Scripts\activate </span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Important libs</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements_jupyterbook.txt</span>
+</pre></div>
+</div>
+<p>must be run in root path:</p>
+<ul class="simple">
+<li><p>Clean existing builds</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jupyter-book clean .</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Build Book (can be accessed via _build/html/index.html) :</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jupyter-book build . </span>
+</pre></div>
+</div>
+</section>
+<section id="github-pipeline-rates">
+<h2><span class="section-number">6.3. </span>Github Pipeline Rates:<a class="headerlink" href="#github-pipeline-rates" title="Link to this heading">#</a></h2>
+<p>Because we own a GitHub Pro Education Account, <strong>we have a capacity of 3,000 minutes using GitHub’s pipeline servers and a storage capacity of 1GB.</strong></p>
+<p>Windows server have a multiplier of 2x which means that 1,500 minutes per month the pipeline server can be running (see <a class="reference external" href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions">GitHub Billing</a>)</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -519,6 +579,23 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-pipeline">6.1. Build Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pages-pipeline">6.2. GitHub Pages Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-pipeline-rates">6.3. Github Pipeline Rates:</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

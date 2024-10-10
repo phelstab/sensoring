@@ -456,7 +456,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">7.1. Sensors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">7.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output">7.2. Output</a></li>
 </ul>
             </nav>
         </div>
@@ -485,8 +485,40 @@ document.write(`
 <li><p>Skin temperature: 1Hz, 2Hz, 4Hz options, 32 bit resolution</p></li>
 </ul>
 </section>
-<section id="codecs">
-<h2><span class="section-number">7.2. </span>Codecs<a class="headerlink" href="#codecs" title="Link to this heading">#</a></h2>
+<section id="output">
+<h2><span class="section-number">7.2. </span>Output<a class="headerlink" href="#output" title="Link to this heading">#</a></h2>
+<p>The Polar H10 sensor provides three main types of data, which are saved in separate CSV files:</p>
+<p>Interbeat Interval (IBI) Data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span><span class="p">:</span> <span class="n">polar_ibi_data</span><span class="o">.</span><span class="n">csv</span>
+<span class="n">Columns</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">,</span> <span class="n">IBI</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">IBI</span><span class="p">:</span> <span class="n">Interbeat</span> <span class="n">interval</span> <span class="ow">in</span> <span class="n">milliseconds</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">Accelerometer</span> <span class="n">Data</span><span class="p">:</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>File: polar_acc_data.csv
+Columns: Timestamp, X, Y, Z
+Timestamp: Unix timestamp in seconds (float)
+X, Y, Z: Acceleration values in G (gravitational force), range ±8G (float)
+Sampling rate: 200 Hz
+Electrocardiography (ECG) Data:
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span><span class="p">:</span> <span class="n">polar_ecg_data</span><span class="o">.</span><span class="n">csv</span>
+<span class="n">Columns</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">,</span> <span class="n">ECG</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">ECG</span><span class="p">:</span> <span class="n">ECG</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">microvolts</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mi">130</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Additional details:</p>
+<ul class="simple">
+<li><p>The data is collected in real-time and stored in circular buffers before being written to the CSV files.</p></li>
+<li><p>The timestamp for all data types is synchronized to the system clock (epoch time).</p></li>
+<li><p>The accelerometer data is converted from raw values to G units (dividing by 100).</p></li>
+<li><p>The ECG data is provided in its raw format (microvolts).</p></li>
+<li><p>The IBI data is converted from 1/1024 seconds format to milliseconds.</p></li>
+</ul>
 </section>
 </section>
 
@@ -555,7 +587,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">7.1. Sensors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">7.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output">7.2. Output</a></li>
 </ul>
   </nav></div>
 

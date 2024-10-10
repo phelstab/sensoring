@@ -456,7 +456,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">8.1. Sensors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">8.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output">8.2. Output</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.3. Application runtime</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.4. Important notes</a></li>
 </ul>
@@ -491,8 +491,65 @@ document.write(`
 <li><p>tag - Tag taken from the device (by pressing the button)</p></li>
 </ul>
 </section>
-<section id="codecs">
-<h2><span class="section-number">8.2. </span>Codecs<a class="headerlink" href="#codecs" title="Link to this heading">#</a></h2>
+<section id="output">
+<h2><span class="section-number">8.2. </span>Output<a class="headerlink" href="#output" title="Link to this heading">#</a></h2>
+<p>The Empatica E4 sensor provides several types of data, which are streamed in real-time:</p>
+<p>Accelerometer Data (acc):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Acc</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">:</span> <span class="n">Acceleration</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">1</span><span class="o">/</span><span class="mi">64</span><span class="n">g</span> <span class="n">units</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mi">32</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Blood Volume Pulse Data (bvp):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Bvp</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">BVP</span><span class="p">:</span> <span class="n">Blood</span> <span class="n">volume</span> <span class="n">pulse</span> <span class="n">value</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mi">64</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Galvanic Skin Response Data (gsr):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Gsr</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">GSR</span><span class="p">:</span> <span class="n">Electrodermal</span> <span class="n">activity</span> <span class="ow">in</span> <span class="n">microsiemens</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mi">4</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Interbeat Interval and Heartbeat Data (ibi):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Ibi</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">IBI</span><span class="p">:</span> <span class="n">Interbeat</span> <span class="n">interval</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">depends</span> <span class="n">on</span> <span class="n">heartbeat</span> <span class="n">detection</span>
+</pre></div>
+</div>
+<p>Skin Temperature Data (tmp):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Temperature</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">Temperature</span><span class="p">:</span> <span class="n">Skin</span> <span class="n">temperature</span> <span class="ow">in</span> <span class="n">degrees</span> <span class="n">Celsius</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mi">4</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Battery Level Data (bat):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Batt</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">Battery</span><span class="p">:</span> <span class="n">Battery</span> <span class="n">level</span> <span class="n">percentage</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="mf">0.1</span> <span class="n">Hz</span>
+</pre></div>
+</div>
+<p>Tag Data (tag):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Format</span><span class="p">:</span> <span class="n">E4_Tag</span>
+<span class="n">Timestamp</span><span class="p">:</span> <span class="n">Unix</span> <span class="n">timestamp</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="k">with</span> <span class="n">millisecond</span> <span class="n">precision</span>
+<span class="n">Tag</span><span class="p">:</span> <span class="n">Always</span> <span class="mi">1</span><span class="p">,</span> <span class="n">indicates</span> <span class="n">a</span> <span class="n">button</span> <span class="n">press</span> <span class="n">event</span>
+<span class="n">Sampling</span> <span class="n">rate</span><span class="p">:</span> <span class="n">On</span><span class="o">-</span><span class="n">demand</span><span class="p">,</span> <span class="n">when</span> <span class="n">the</span> <span class="n">button</span> <span class="ow">is</span> <span class="n">pressed</span>
+</pre></div>
+</div>
+<p><strong>Additional details:</strong></p>
+<ul class="simple">
+<li><p>Data is streamed in real-time over a TCP connection.</p></li>
+<li><p>Clients need to subscribe to specific data streams to receive the data.</p></li>
+<li><p>The timestamp for all data types is synchronized to the E4 streaming server’s clock.</p></li>
+<li><p>Data can be paused and resumed without disconnecting from the device.</p></li>
+</ul>
 </section>
 <section id="application-runtime">
 <h2><span class="section-number">8.3. </span>Application runtime<a class="headerlink" href="#application-runtime" title="Link to this heading">#</a></h2>
@@ -574,7 +631,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensors">8.1. Sensors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codecs">8.2. Codecs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output">8.2. Output</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-runtime">8.3. Application runtime</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notes">8.4. Important notes</a></li>
 </ul>
